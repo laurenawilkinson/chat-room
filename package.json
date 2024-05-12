@@ -1,0 +1,16 @@
+{
+  "name": "chat-room",
+  "version": "1.0.0",
+  "description": "Websocket chat room",
+  "main": "index.js",
+  "dependencies": {
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "cd server && npm run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
