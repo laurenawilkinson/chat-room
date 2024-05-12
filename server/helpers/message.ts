@@ -1,8 +1,8 @@
-import { User } from '@/types/user'
+import { UserProfile } from '@/types/user'
 import { MessageResponse } from '@/types/responses'
 
 export const createMessageResponse = (
-  user: User,
+  user: UserProfile,
   message: string
 ): MessageResponse => {
   return { type: 'message', data: { user, message } }

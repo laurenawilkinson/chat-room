@@ -1,5 +1,10 @@
-import { createUsersListResponse } from '@/helpers/user'
-import { User, UserStore } from '@/types/user'
+import {
+  createCurrentUserResponse,
+  createUsersListResponse,
+} from '@/helpers/user'
+import { UserStore } from '@/types/user'
+import User from './User'
+import { WebSocket } from 'ws'
 
 class UserManager {
   public users: UserStore = {}
@@ -11,12 +16,19 @@ class UserManager {
     server.broadcast(usersResponse)
   }
 
-  addUser = (userId: string): User => {
-    this.users[userId] = {
-      id: userId,
-      username: 'Anonymous Cat',
-    }
-    return this.users[userId]
+  broadcastCurrentUserProfile = (client: WebSocket, userId: string) => {
+    const user = this.getUser(userId)
+
+    if (!user) return
+
+    const response = createCurrentUserResponse(user)
+    server.broadcastTo(client, response)
+  }
+
+  addUser = (client: WebSocket): User => {
+    const user = new User(client)
+    this.users[user.id] = user
+    return user
   }
 
   removeUser = (userId: string) => {

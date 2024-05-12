@@ -1,4 +1,6 @@
-export interface User {
+import User from '@/models/User'
+
+export interface UserProfile {
   id: string
   username: string
   colour?: string

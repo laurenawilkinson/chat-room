@@ -1,6 +1,5 @@
 import { WebSocket, WebSocketServer } from 'ws'
 import { type Response } from '@/types/responses'
-import { v4 as uuidv4 } from 'uuid'
 import { type Request } from '@/types/requests'
 import { createMessageResponse } from '@/helpers/message'
 
@@ -13,33 +12,31 @@ class ServerManager {
   }
 
   private onConnection = (socket: WebSocket) => {
-    const userId = uuidv4()
-    const user = userManager.addUser(userId)
+    const user = userManager.addUser(socket)
 
-    // Broadcast the new user
+    // Broadcast the new user to all
     userManager.broadcastUsers()
+
+    // Broadcast user profile to current user
+    userManager.broadcastCurrentUserProfile(socket, user.id)
 
     // Received message from user
     socket.on('message', (req: string) => {
       const request = JSON.parse(req) as Request
 
       console.log('recieved from user!')
-      let responsePayload = null
 
       switch (request.type) {
         case 'message':
-          responsePayload = createMessageResponse(user, request.data.message)
+          const res = createMessageResponse(user, request.data.message)
+          this.broadcast(res)
           break
-      }
-
-      if (responsePayload) {
-        this.broadcast(responsePayload)
       }
     })
 
     // User disconnected
     socket.on('close', () => {
-      userManager.removeUser(userId)
+      userManager.removeUser(user.id)
       userManager.broadcastUsers()
     })
   }
@@ -54,6 +51,15 @@ class ServerManager {
         client.send(data)
       }
     })
+  }
+
+  // Send data to specific user
+  broadcastTo = (client: WebSocket, response: Response) => {
+    const data = JSON.stringify(response)
+
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(data)
+    }
   }
 }
 

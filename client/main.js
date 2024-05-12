@@ -28,6 +28,10 @@ const onUsers = (data) => {
   console.log('users', data)
 }
 
+const onCurrentUser = (data) => {
+  console.log('my profile', data)
+}
+
 // Ws listeners
 ws.onopen = () => {
   console.log('WebSocket connection is open...')
@@ -41,6 +45,8 @@ ws.onmessage = (e) => {
       return onMessage(response.data)
     case 'users':
       return onUsers(response.data)
+    case 'currentUser':
+      return onCurrentUser(response.data)
     default:
       return
   }
