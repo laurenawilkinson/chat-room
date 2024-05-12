@@ -1,11 +1,17 @@
-import { type User } from '@/types/user'
+import { createUsersListResponse } from '@/helpers/user'
+import { User, UserStore } from '@/types/user'
 
 class UserManager {
-  public users: { [id: string]: User } = {}
+  public users: UserStore = {}
 
   constructor() {}
 
-  addUser(userId: string): User {
+  broadcastUsers = () => {
+    const usersResponse = createUsersListResponse(this.users)
+    server.broadcast(usersResponse)
+  }
+
+  addUser = (userId: string): User => {
     this.users[userId] = {
       id: userId,
       username: 'Anonymous Cat',
@@ -13,11 +19,11 @@ class UserManager {
     return this.users[userId]
   }
 
-  removeUser(userId: string) {
+  removeUser = (userId: string) => {
     delete this.users[userId]
   }
 
-  getUser(userId: string): User | null {
+  getUser = (userId: string): User | null => {
     return this.users[userId] ?? null
   }
 }

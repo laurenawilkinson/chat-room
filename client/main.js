@@ -24,6 +24,10 @@ const onMessage = (data) => {
   messageList.appendChild(messageEl)
 }
 
+const onUsers = (data) => {
+  console.log('users', data)
+}
+
 // Ws listeners
 ws.onopen = () => {
   console.log('WebSocket connection is open...')
@@ -35,6 +39,8 @@ ws.onmessage = (e) => {
   switch (response.type) {
     case 'message':
       return onMessage(response.data)
+    case 'users':
+      return onUsers(response.data)
     default:
       return
   }

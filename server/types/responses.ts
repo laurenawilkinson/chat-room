@@ -1,19 +1,25 @@
 import { User } from './user'
 
-type ResponseType = 'message' | 'user'
-type ResponseData = MessageResponseData
-
-export interface Response {
+type ResponseType = 'message' | 'users'
+export type Response = MessageResponse | UsersResponse
+type BaseResponse = {
   type: ResponseType
-  data: ResponseData
+  data: object
 }
 
-interface MessageResponseData {
-  user: User
-  message: string
-}
+//--- Messages
 
-export interface MessageResponse extends Response {
+export interface MessageResponse extends BaseResponse {
   type: 'message'
-  data: MessageResponseData
+  data: {
+    user: User
+    message: string
+  }
+}
+
+//--- Users
+
+export interface UsersResponse extends BaseResponse {
+  type: 'users'
+  data: { users: User[] }
 }

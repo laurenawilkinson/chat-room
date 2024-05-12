@@ -3,3 +3,7 @@ export interface User {
   username: string
   colour?: string
 }
+
+export interface UserStore {
+  [id: string]: User
+}
