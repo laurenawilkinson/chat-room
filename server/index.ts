@@ -8,7 +8,7 @@ import UserManager from '@/models/UserManager'
 
 const port = process.env.PORT || 3000
 const app = express()
-  .use(express.static(path.join(__dirname, '../client')))
+  .use(express.static(path.join(__dirname, '../client/dist')))
   .listen(port, () => {
     console.log(`Listening on http://localhost:${port}`)
   })
