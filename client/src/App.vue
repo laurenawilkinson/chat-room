@@ -90,3 +90,11 @@ const onCurrentUser = (data: any) => {
   currentUser.value = { ...data }
 }
 </script>
+
+<style lang="scss">
+@import '@/styles/reset.scss';
+
+body {
+  background: #dff7ff;
+}
+</style>
