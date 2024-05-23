@@ -1,0 +1,19 @@
+{
+  "autorun": true,
+  "terminals": [
+    {
+      "name": "Client Terminal",
+      "command": "bash",
+      "args": [],
+      "cwd": "client",
+      "commands": ["npm run dev"]
+    },
+    {
+      "name": "Server Terminal",
+      "command": "bash",
+      "args": [],
+      "cwd": "server",
+      "commands": ["npm run dev"]
+    }
+  ]
+}

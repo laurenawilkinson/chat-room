@@ -4,9 +4,7 @@ import path from 'path'
 import ServerManager from '@/models/ServerManager'
 import UserManager from '@/models/UserManager'
 
-// https://github.com/codezri/react-node-websockets-demo/blob/main/server/index.js
-
-const port = process.env.PORT || 3000
+const port = process.env.WS_PORT || 3000
 const app = express()
   .use(express.static(path.join(__dirname, '../client/dist')))
   .listen(port, () => {
