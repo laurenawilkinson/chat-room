@@ -14,11 +14,11 @@ class ServerManager {
   private onConnection = (socket: WebSocket) => {
     const user = userManager.addUser(socket)
 
+    // Broadcast user profile to the active user
+    userManager.broadcastActiveUserProfile(socket, user.id)
+
     // Broadcast the new user to all
     userManager.broadcastUsers()
-
-    // Broadcast user profile to current user
-    userManager.broadcastCurrentUserProfile(socket, user.id)
 
     // Received message from user
     socket.on('message', (req: string) => {

@@ -1,5 +1,5 @@
 import {
-  createCurrentUserResponse,
+  createActiveUserResponse,
   createUsersListResponse,
 } from '@/helpers/user'
 import { UserStore } from '@/types/user'
@@ -16,12 +16,12 @@ class UserManager {
     server.broadcast(usersResponse)
   }
 
-  broadcastCurrentUserProfile = (client: WebSocket, userId: string) => {
+  broadcastActiveUserProfile = (client: WebSocket, userId: string) => {
     const user = this.getUser(userId)
 
     if (!user) return
 
-    const response = createCurrentUserResponse(user)
+    const response = createActiveUserResponse(user)
     server.broadcastTo(client, response)
   }
 

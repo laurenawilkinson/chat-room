@@ -1,29 +1,16 @@
 <template>
   <main>
-    <h1>Chat Room</h1>
-    <h2>Messages:</h2>
-    <ul>
-      <li v-for="(item, index) in messages" :key="index">
-        <strong>{{ item.user.username }}</strong>
-        <p>{{ item.message }}</p>
-      </li>
-    </ul>
-    <form @submit.prevent="sendMessage">
-      <label> Send message </label>
-      <input v-model="newMessage" />
-      <button type="submit">Send</button>
-    </form>
-    <h2>Users:</h2>
-    <ul>
-      <li v-for="user in users" :key="user.id">
-        {{ user.username }}
-      </li>
-    </ul>
+    <div class="container">
+      <UserPanel :users="users" :activeUser="activeUser" />
+      <ChatPanel :messages="messages" @send:message="sendMessage" />
+    </div>
   </main>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import UserPanel from './components/UserPanel.vue'
+import ChatPanel from './components/ChatPanel.vue'
 
 const ws = new WebSocket(`ws://${import.meta.env.VITE_WS_DOMAIN}:${import.meta.env.VITE_WS_PORT}`)
 
@@ -40,8 +27,8 @@ ws.onmessage = (e: MessageEvent<string>) => {
       return onMessage(response.data)
     case 'users':
       return onUsers(response.data)
-    case 'currentUser':
-      return onCurrentUser(response.data)
+    case 'activeUser':
+      return onActiveUser(response.data)
     default:
       return
   }
@@ -55,19 +42,16 @@ ws.onerror = (error) => console.error(error)
 
 const users = ref<any[]>([])
 const messages = ref<any[]>([])
-const currentUser = ref({
+const activeUser = ref({
   id: '',
   username: ''
 })
 
-const newMessage = ref('')
-
 const sendData = (json: object) => ws.send(JSON.stringify(json))
 
 // Send message
-const sendMessage = () => {
-  sendData({ type: 'message', data: { message: newMessage.value } })
-  newMessage.value = ''
+const sendMessage = (message: string) => {
+  sendData({ type: 'message', data: { message } })
 }
 
 // Response handlers
@@ -86,15 +70,36 @@ const onUsers = (data: any) => {
   console.log(data.users)
 }
 
-const onCurrentUser = (data: any) => {
-  currentUser.value = { ...data }
+const onActiveUser = (data: any) => {
+  activeUser.value = { ...data }
 }
 </script>
 
 <style lang="scss">
 @import '@/styles/reset.scss';
+@import '@/styles/ui.scss';
 
 body {
   background: #dff7ff;
+}
+</style>
+
+<style lang="scss" scoped>
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 2rem;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 345px 1fr;
+  gap: 50px;
+  width: 100%;
+  max-width: 1350px;
+  height: 80%;
+  min-height: 600px;
 }
 </style>

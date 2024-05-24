@@ -1,7 +1,7 @@
 import { UserProfile } from './user'
 
-type ResponseType = 'message' | 'users' | 'currentUser'
-export type Response = MessageResponse | UsersResponse | CurrentUserResponse
+type ResponseType = 'message' | 'users' | 'activeUser'
+export type Response = MessageResponse | UsersResponse | ActiveUserResponse
 type BaseResponse = {
   type: ResponseType
   data: object
@@ -24,7 +24,7 @@ export interface UsersResponse extends BaseResponse {
   data: { users: UserProfile[] }
 }
 
-export interface CurrentUserResponse extends BaseResponse {
-  type: 'currentUser'
+export interface ActiveUserResponse extends BaseResponse {
+  type: 'activeUser'
   data: UserProfile
 }

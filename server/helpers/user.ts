@@ -1,5 +1,5 @@
 import User from '@/models/User'
-import { CurrentUserResponse, UsersResponse } from '@/types/responses'
+import { ActiveUserResponse, UsersResponse } from '@/types/responses'
 import { UserStore } from '@/types/user'
 
 export const createUsersListResponse = (users: UserStore): UsersResponse => {
@@ -8,7 +8,7 @@ export const createUsersListResponse = (users: UserStore): UsersResponse => {
   return { type: 'users', data: { users: usersList } }
 }
 
-export const createCurrentUserResponse = (user: User): CurrentUserResponse => {
+export const createActiveUserResponse = (user: User): ActiveUserResponse => {
   const profile = user.toJSON()
-  return { type: 'currentUser', data: profile }
+  return { type: 'activeUser', data: profile }
 }
