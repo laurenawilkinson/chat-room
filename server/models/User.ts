@@ -1,4 +1,4 @@
-import { UserStatus } from '@/types/user'
+import { UserProfile, UserStatus } from '@/types/user'
 import { WebSocket } from 'ws'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -22,6 +22,15 @@ class User {
 
   setColour = (colour: string) => {
     this.colour = colour
+  }
+
+  toJSON = (): UserProfile => {
+    return {
+      id: this.id,
+      username: this.username,
+      status: this.status,
+      colour: this.colour,
+    }
   }
 }
 

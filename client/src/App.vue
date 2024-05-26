@@ -2,15 +2,15 @@
   <main>
     <div class="container">
       <UserPanel :users="users" :activeUser="activeUser" />
-      <ChatPanel :messages="messages" @send:message="sendMessage" />
+      <ChatPanel ref="chatPanel" :messages="messages" @send:message="sendMessage" />
     </div>
   </main>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import UserPanel from '@/components/UserPanel/UserPanel.vue'
-import ChatPanel from '@/components/ChatPanel.vue'
+import ChatPanel from '@/components/ChatPanel/ChatPanel.vue'
 
 const ws = new WebSocket(`ws://${import.meta.env.VITE_WS_DOMAIN}:${import.meta.env.VITE_WS_PORT}`)
 
@@ -46,6 +46,7 @@ const activeUser = ref({
   id: '',
   username: ''
 })
+const chatPanel = ref<ChatPanel>()
 
 const sendData = (json: object) => ws.send(JSON.stringify(json))
 
@@ -55,7 +56,7 @@ const sendMessage = (message: string) => {
 }
 
 // Response handlers
-const onMessage = (data: any) => {
+const onMessage = async (data: any) => {
   const maxMessages = 30
   if (messages.value.length < maxMessages) {
     messages.value.push(data)
@@ -63,6 +64,10 @@ const onMessage = (data: any) => {
     messages.value.shift()
     messages.value.push(data)
   }
+
+  nextTick(() => {
+    chatPanel.value.scrollToNewestMessage()
+  })
 }
 
 const onUsers = (data: any) => {
