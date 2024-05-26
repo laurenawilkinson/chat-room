@@ -3,12 +3,11 @@ import { ActiveUserResponse, UsersResponse } from '@/types/responses'
 import { UserStore } from '@/types/user'
 
 export const createUsersListResponse = (users: UserStore): UsersResponse => {
-  const usersList = Object.keys(users).map((id) => users[id].toJSON())
+  const usersList = Object.keys(users).map((id) => users[id])
 
   return { type: 'users', data: { users: usersList } }
 }
 
 export const createActiveUserResponse = (user: User): ActiveUserResponse => {
-  const profile = user.toJSON()
-  return { type: 'activeUser', data: profile }
+  return { type: 'activeUser', data: user }
 }
