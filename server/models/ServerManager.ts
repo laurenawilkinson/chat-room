@@ -24,8 +24,6 @@ class ServerManager {
     socket.on('message', (req: string) => {
       const request = JSON.parse(req) as Request
 
-      console.log('recieved from user!')
-
       switch (request.type) {
         case 'message':
           const res = createMessageResponse(user, request.data.message)
@@ -43,7 +41,6 @@ class ServerManager {
 
   // Send data to all connected users
   broadcast = (response: Response) => {
-    console.log('broadcasting...', response)
     const data = JSON.stringify(response)
 
     this.ws.clients.forEach((client) => {

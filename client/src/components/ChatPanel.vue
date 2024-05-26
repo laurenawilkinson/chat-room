@@ -35,8 +35,8 @@ const sendMessage = () => {
 .panel {
   display: flex;
   flex-direction: column;
-  padding: 2rem;
   gap: 1.5rem;
+  height: inherit;
 }
 
 ul {

@@ -9,8 +9,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import UserPanel from './components/UserPanel.vue'
-import ChatPanel from './components/ChatPanel.vue'
+import UserPanel from '@/components/UserPanel/UserPanel.vue'
+import ChatPanel from '@/components/ChatPanel.vue'
 
 const ws = new WebSocket(`ws://${import.meta.env.VITE_WS_DOMAIN}:${import.meta.env.VITE_WS_PORT}`)
 
@@ -67,7 +67,6 @@ const onMessage = (data: any) => {
 
 const onUsers = (data: any) => {
   users.value = [...data.users]
-  console.log(data.users)
 }
 
 const onActiveUser = (data: any) => {
@@ -77,11 +76,8 @@ const onActiveUser = (data: any) => {
 
 <style lang="scss">
 @import '@/styles/reset.scss';
-@import '@/styles/ui.scss';
-
-body {
-  background: #dff7ff;
-}
+@import '@/styles/variables.scss';
+@import '@/styles/global.scss';
 </style>
 
 <style lang="scss" scoped>
@@ -99,7 +95,7 @@ main {
   gap: 50px;
   width: 100%;
   max-width: 1350px;
-  height: 80%;
+  height: 80vh;
   min-height: 600px;
 }
 </style>

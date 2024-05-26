@@ -1,0 +1,15 @@
+body {
+  background: var(--background-colour);
+  font-size: var(--16px);
+  font-family: 'Nunito', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: var(--font-weight-regular);
+  font-style: normal;
+}
+
+.panel {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 3px 6px #849eb025;
+  padding: 2rem;
+}
