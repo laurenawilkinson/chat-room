@@ -5,7 +5,8 @@
   "devDependencies": {},
   "scripts": {
     "prebuild": "cd client && npm ci && npm run build-only",
-    "build": "cd server && npm ci"
+    "build": "cd server && npm ci",
+    "start": "cd server && npm run start"
   },
   "repository": {
     "type": "git",
