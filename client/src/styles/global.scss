@@ -5,6 +5,10 @@ body {
   font-optical-sizing: auto;
   font-weight: var(--font-weight-regular);
   font-style: normal;
+
+  ::selection {
+    background-color: rgba(#bababa, 0.2);
+  }
 }
 
 .panel {

@@ -10,7 +10,7 @@
     <form @submit.prevent="sendMessage">
       <input v-model="message" placeholder="Type a message" :maxlength="maxMessageLength" />
       <aside>
-        <IconButton type="submit" theme="primary">
+        <IconButton type="submit" theme="primary" :disabled="!canSendMessage">
           <IconMessageForward />
         </IconButton>
       </aside>
@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
 import { IconMessageForward } from '@tabler/icons-vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import IconButton from '@/components/UI/IconButton.vue'
 import ChatPanelMessage from '@/components/ChatPanel/ChatPanelMessage.vue'
 
@@ -34,8 +34,12 @@ const emit = defineEmits(['send:message'])
 const message = ref('')
 const maxMessageLength = 250
 
+const canSendMessage = computed(
+  () => message.value.length > 0 && message.value.length <= maxMessageLength
+)
+
 const sendMessage = () => {
-  if (message.value.length === 0 || message.value.length > maxMessageLength) return
+  if (!canSendMessage.value) return
 
   emit('send:message', message.value)
   message.value = ''
@@ -83,10 +87,12 @@ form {
 
   aside {
     display: flex;
+    align-items: center;
     gap: 1rem;
     position: absolute;
-    top: var(--18px);
+    top: 0;
     right: var(--18px);
+    height: 100%;
   }
 }
 </style>

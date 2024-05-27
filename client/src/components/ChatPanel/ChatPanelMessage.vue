@@ -32,18 +32,17 @@ const dateString = computed(() => {
 .chat-panel-message {
   padding: 0.25rem 0.5rem;
   line-height: 1.4;
-  font-size: var(--14px);
 
   > div {
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
   }
 
   strong {
-    font-size: var(--12px);
-    font-weight: var(--font-weight-semibold);
+    font-size: var(--14px);
+    font-weight: var(--font-weight-bold);
   }
 
   small {

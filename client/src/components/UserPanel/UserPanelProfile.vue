@@ -17,6 +17,7 @@ defineProps<UserPanelProfileProps>()
 
 <style lang="scss" scoped>
 strong {
-  line-height: 1.5;
+  display: block;
+  margin-bottom: 0.25rem;
 }
 </style>
