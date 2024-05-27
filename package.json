@@ -1,0 +1,21 @@
+{
+  "name": "chat-room",
+  "version": "1.0.0",
+  "description": "Websocket driven chat room",
+  "devDependencies": {},
+  "scripts": {
+    "prebuild": "cd client && npm ci && npm run build-only",
+    "build": "cd server && npm ci"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurenawilkinson/chat-room.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/laurenawilkinson/chat-room/issues"
+  },
+  "homepage": "https://github.com/laurenawilkinson/chat-room#readme"
+}
