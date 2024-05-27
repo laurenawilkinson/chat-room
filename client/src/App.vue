@@ -13,7 +13,7 @@ import UserPanel from '@/components/UserPanel/UserPanel.vue'
 import ChatPanel from '@/components/ChatPanel/ChatPanel.vue'
 
 const ws = new WebSocket(
-  `ws://${window.location.host.split(':')[0]}:${import.meta.env.VITE_WS_PORT}`
+  `${import.meta.env.PROD ? 'wss' : 'ws'}://${window.location.host.split(':')[0]}:${import.meta.env.VITE_WS_PORT}`
 )
 
 // Websocket listeners
