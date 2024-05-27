@@ -44,9 +44,10 @@ const users = ref<any[]>([])
 const messages = ref<any[]>([])
 const activeUser = ref({
   id: '',
-  username: ''
+  username: '',
+  status: 'unknown'
 })
-const chatPanel = ref<ChatPanel>()
+const chatPanel = ref<typeof ChatPanel>()
 
 const sendData = (json: object) => ws.send(JSON.stringify(json))
 
@@ -66,7 +67,7 @@ const onMessage = async (data: any) => {
   }
 
   nextTick(() => {
-    chatPanel.value.scrollToNewestMessage()
+    chatPanel.value?.scrollToNewestMessage()
   })
 }
 

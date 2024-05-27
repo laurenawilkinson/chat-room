@@ -9,19 +9,20 @@
       </ul>
     </div>
     <form @submit.prevent="sendMessage">
-      <textarea
-        v-model="message"
-        placeholder="Type a message"
-        :rows="2"
-        @keydown.enter.prevent="sendMessage"
-      />
-      <button type="submit">Send</button>
+      <input v-model="message" placeholder="Type a message" :maxlength="maxMessageLength" />
+      <aside>
+        <IconButton type="submit" theme="primary">
+          <IconMessageForward />
+        </IconButton>
+      </aside>
     </form>
   </section>
 </template>
 
 <script lang="ts" setup>
+import { IconMessageForward } from '@tabler/icons-vue'
 import { ref } from 'vue'
+import IconButton from '@/components/UI/IconButton.vue'
 
 interface ChatPanelProps {
   messages: any[]
@@ -31,14 +32,19 @@ defineProps<ChatPanelProps>()
 const emit = defineEmits(['send:message'])
 
 const message = ref('')
+const maxMessageLength = 250
 
 const sendMessage = () => {
+  if (message.value.length === 0 || message.value.length > maxMessageLength) return
+
   emit('send:message', message.value)
   message.value = ''
 }
 
 const messageList = ref<HTMLDivElement>()
 const scrollToNewestMessage = () => {
+  if (!messageList.value) return
+
   messageList.value.scrollTop = messageList.value.scrollHeight
 }
 
@@ -77,8 +83,20 @@ li {
 }
 
 form {
+  $aside-width: 30px; // Icon button width
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  position: relative;
+
+  input {
+    padding-right: calc(var(--20px) + #{$aside-width} + 0.5rem);
+  }
+
+  aside {
+    display: flex;
+    gap: 1rem;
+    position: absolute;
+    top: var(--18px);
+    right: var(--18px);
+  }
 }
 </style>

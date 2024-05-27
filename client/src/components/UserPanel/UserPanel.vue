@@ -67,5 +67,6 @@ li {
   gap: var(--10px);
   font-weight: var(--font-weight-medium);
   padding-block: 1rem;
+  font-size: var(--14px);
 }
 </style>
