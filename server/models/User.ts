@@ -1,6 +1,7 @@
 import { UserProfile, UserStatus } from '@/types/user'
 import { WebSocket } from 'ws'
 import { v4 as uuidv4 } from 'uuid'
+import { generateRandomUsername } from '@/helpers/user'
 
 class User {
   private client: WebSocket
@@ -12,7 +13,7 @@ class User {
   constructor(client: WebSocket) {
     this.client = client
     this.id = uuidv4()
-    this.username = 'Anonymous Cat'
+    this.username = generateRandomUsername()
     this.status = 'online'
   }
 
