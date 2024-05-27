@@ -4,7 +4,9 @@ import path from 'path'
 import ServerManager from '@/models/ServerManager'
 import UserManager from '@/models/UserManager'
 
-const port = process.env.WS_PORT || 3000
+require('dotenv').config({ path: '../.env' })
+
+const port = process.env.PORT || 3000
 const app = express()
   .use(express.static(path.join(__dirname, '../client/dist')))
   .listen(port, () => {

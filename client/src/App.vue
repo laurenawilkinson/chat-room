@@ -12,7 +12,9 @@ import { ref, nextTick } from 'vue'
 import UserPanel from '@/components/UserPanel/UserPanel.vue'
 import ChatPanel from '@/components/ChatPanel/ChatPanel.vue'
 
-const ws = new WebSocket(`ws://${import.meta.env.VITE_WS_DOMAIN}:${import.meta.env.VITE_WS_PORT}`)
+const ws = new WebSocket(
+  `ws://${window.location.host.split(':')[0]}:${import.meta.env.VITE_WS_PORT}`
+)
 
 // Websocket listeners
 ws.onopen = () => {
