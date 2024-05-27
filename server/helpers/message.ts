@@ -5,5 +5,8 @@ export const createMessageResponse = (
   user: UserProfile,
   message: string
 ): MessageResponse => {
-  return { type: 'message', data: { user, message } }
+  return {
+    type: 'message',
+    data: { user, message, date: new Date().toUTCString() },
+  }
 }

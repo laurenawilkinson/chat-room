@@ -3,8 +3,7 @@
     <div class="message-list" ref="messageList">
       <ul>
         <li v-for="(item, index) in messages" :key="index">
-          <strong>{{ item.user.username }}</strong>
-          <p>{{ item.message }}</p>
+          <ChatPanelMessage :user="item.user" :message="item.message" :date="item.date" />
         </li>
       </ul>
     </div>
@@ -23,6 +22,7 @@
 import { IconMessageForward } from '@tabler/icons-vue'
 import { ref } from 'vue'
 import IconButton from '@/components/UI/IconButton.vue'
+import ChatPanelMessage from '@/components/ChatPanel/ChatPanelMessage.vue'
 
 interface ChatPanelProps {
   messages: any[]
@@ -70,16 +70,6 @@ ul {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-li {
-  padding: 0.25rem 0.5rem;
-  line-height: 1.4;
-
-  strong {
-    font-size: var(--14px);
-    font-weight: var(--font-weight-semibold);
-  }
 }
 
 form {

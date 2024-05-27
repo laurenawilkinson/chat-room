@@ -14,6 +14,7 @@ export interface MessageResponse extends BaseResponse {
   data: {
     user: UserProfile
     message: string
+    date: string
   }
 }
 
