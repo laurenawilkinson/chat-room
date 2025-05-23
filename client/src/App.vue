@@ -11,38 +11,46 @@
 import { ref, nextTick } from 'vue'
 import UserPanel from '@/components/UserPanel/UserPanel.vue'
 import ChatPanel from '@/components/ChatPanel/ChatPanel.vue'
+import { useWebSocket } from '@vueuse/core'
 
 const websocketURL = import.meta.env.PROD
   ? `wss://${window.location.host}`
   : `ws://localhost:${import.meta.env.VITE_WS_PORT}`
 
-const ws = new WebSocket(websocketURL)
+const { send } = useWebSocket(websocketURL, {
+  heartbeat: {
+    message: JSON.stringify({
+      type: 'heartbeat',
+      data: {
+        message: 'ping'
+      }
+    }),
+    interval: 1000 * 30,
+  },
+  onConnected: () => {
+    console.log('WebSocket connection is open...')
+  },
+  onDisconnected: () => {
+    console.error('WebSocket has disconnected')
+  },
+  onError: (_ws, event) => {
+    console.error('WebSocket has errored', event)
+  },
+  onMessage: (_ws, event: MessageEvent<string>) => {
+    const response = JSON.parse(event.data)
 
-// Websocket listeners
-ws.onopen = () => {
-  console.log('WebSocket connection is open...')
-}
-
-ws.onmessage = (e: MessageEvent<string>) => {
-  const response = JSON.parse(e.data)
-
-  switch (response.type) {
-    case 'message':
-      return onMessage(response.data)
-    case 'users':
-      return onUsers(response.data)
-    case 'activeUser':
-      return onActiveUser(response.data)
-    default:
-      return
+    switch (response.type) {
+      case 'message':
+        return onMessage(response.data)
+      case 'users':
+        return onUsers(response.data)
+      case 'activeUser':
+        return onActiveUser(response.data)
+      default:
+        return
+    }
   }
-}
-
-ws.onclose = () => {
-  console.error('WebSocket has disconnected')
-}
-
-ws.onerror = (error) => console.error(error)
+})
 
 const users = ref<any[]>([])
 const messages = ref<any[]>([])
@@ -53,7 +61,7 @@ const activeUser = ref({
 })
 const chatPanel = ref<typeof ChatPanel>()
 
-const sendData = (json: object) => ws.send(JSON.stringify(json))
+const sendData = (json: object) => send(JSON.stringify(json))
 
 // Send message
 const sendMessage = (message: string) => {

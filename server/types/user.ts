@@ -1,6 +1,6 @@
 import User from '@/models/User'
 
-export interface UserProfile {
+export interface UserProfile extends Record<string, unknown> {
   id: string
   username: string
   status: UserStatus

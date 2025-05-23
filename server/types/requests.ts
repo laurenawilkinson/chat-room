@@ -1,16 +1,25 @@
-type RequestType = 'message' | 'user'
-type RequestData = MessageRequestData
+export type Request = HeartbeatRequest | MessageRequest | UserRequest
 
-export interface Request {
-  type: RequestType
-  data: RequestData
+interface BaseRequest {
+  type: string
+  data: Record<string, unknown>
 }
 
-interface MessageRequestData {
-  message: string
+interface HeartbeatRequest extends BaseRequest {
+  type: 'heartbeat'
+  data: {
+    message: 'ping'
+  }
 }
 
-export interface MessageRequest extends Request {
+interface MessageRequest extends BaseRequest {
   type: 'message'
-  data: MessageRequestData
+  data: {
+    message: string
+  }
+}
+
+interface UserRequest extends BaseRequest {
+  type: 'user'
+  data: {}
 }

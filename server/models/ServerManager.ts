@@ -21,14 +21,29 @@ class ServerManager {
     userManager.broadcastUsers()
 
     // Received message from user
-    socket.on('message', (req: string) => {
-      const request = JSON.parse(req) as Request
+    socket.on('message', (req: Buffer) => {
+      try {
+        const request: Request = JSON.parse(req.toString())
 
-      switch (request.type) {
-        case 'message':
-          const res = createMessageResponse(user, request.data.message)
-          this.broadcast(res)
-          break
+        switch (request.type) {
+          case 'heartbeat':
+            this.broadcastTo(user.client, {
+              type: 'heartbeat',
+              data: {
+                message: 'pong',
+              },
+            })
+            break
+          case 'message':
+            const res = createMessageResponse(
+              user.toJSON(),
+              request.data.message
+            )
+            this.broadcast(res)
+            break
+        }
+      } catch (e) {
+        console.error('Error parsing request', e)
       }
     })
 

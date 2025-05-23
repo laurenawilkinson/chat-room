@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { generateRandomUsername } from '@/helpers/user'
 
 class User {
-  private client: WebSocket
+  public readonly client: WebSocket
   public id: string
   public username: string
   public status: UserStatus

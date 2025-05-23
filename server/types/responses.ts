@@ -1,10 +1,21 @@
 import { UserProfile } from './user'
 
-type ResponseType = 'message' | 'users' | 'activeUser'
-export type Response = MessageResponse | UsersResponse | ActiveUserResponse
-type BaseResponse = {
-  type: ResponseType
-  data: object
+export type Response =
+  | HeartbeatResponse
+  | MessageResponse
+  | UsersResponse
+  | ActiveUserResponse
+
+interface BaseResponse {
+  type: string
+  data: Record<string, unknown>
+}
+
+export interface HeartbeatResponse extends BaseResponse {
+  type: 'heartbeat'
+  data: {
+    message: 'pong'
+  }
 }
 
 //--- Messages
