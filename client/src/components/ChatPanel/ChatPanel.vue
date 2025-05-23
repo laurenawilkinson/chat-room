@@ -62,11 +62,18 @@ defineExpose({ scrollToNewestMessage })
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/mixins/breakpoints';
+
 .panel {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   height: inherit;
+
+  @include max-breakpoint($mobile-bp) {
+    border-radius: 0;
+    padding: 1rem;
+  }
 }
 
 .message-list {

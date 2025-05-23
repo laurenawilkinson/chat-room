@@ -1,7 +1,20 @@
 <template>
   <main>
+    <header>
+      <h1>Chat Room</h1>
+      <IconButton @click="showUsersPanel = true">
+        <IconMenu />
+      </IconButton>
+    </header>
     <div class="container">
-      <UserPanel :users="users" :activeUser="activeUser" />
+      <template v-if="isDesktop">
+        <UserPanel :users="users" :activeUser="activeUser" />
+      </template>
+      <template v-else>
+        <Transition name="slide-left" mode="out-in">
+          <UserPanel v-if="showUsersPanel" :users="users" :activeUser="activeUser" @close="showUsersPanel = false" />
+        </Transition>
+      </template>
       <ChatPanel ref="chatPanel" :messages="messages" @send:message="sendMessage" />
     </div>
   </main>
@@ -11,7 +24,10 @@
 import { ref, nextTick } from 'vue'
 import UserPanel from '@/components/UserPanel/UserPanel.vue'
 import ChatPanel from '@/components/ChatPanel/ChatPanel.vue'
-import { useWebSocket } from '@vueuse/core'
+import { IconMenu } from '@tabler/icons-vue'
+import IconButton from './components/UI/IconButton.vue'
+import { useBreakpoints, useWebSocket } from '@vueuse/core'
+import { breakpointsConfig } from './helpers/utils'
 
 const websocketURL = import.meta.env.PROD
   ? `wss://${window.location.host}`
@@ -59,6 +75,9 @@ const activeUser = ref({
   username: '',
   status: 'unknown'
 })
+const showUsersPanel = ref(false);
+const breakpoints = useBreakpoints(breakpointsConfig)
+const isDesktop = breakpoints.greater('lg')
 const chatPanel = ref<typeof ChatPanel>()
 
 const sendData = (json: object) => send(JSON.stringify(json))
@@ -99,21 +118,50 @@ const onActiveUser = (data: any) => {
 </style>
 
 <style lang="scss" scoped>
+@import '@/styles/mixins/breakpoints';
+
 main {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   height: 100vh;
-  padding: 2rem;
+
+  @include min-breakpoint($mobile-bp) {
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    padding: 2rem;
+  }
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: white;
+  border-bottom: 2px solid var(--background-colour);
+
+  @include min-breakpoint($mobile-bp) {
+    display: none;
+  }
+
+  h1 {
+    color: var(--primary-colour);
+    font-size: var(--20px);
+  }
 }
 
 .container {
   display: grid;
-  grid-template-columns: 345px 1fr;
-  gap: 50px;
   width: 100%;
+  height: 100%;
   max-width: 1350px;
-  height: 80vh;
-  min-height: 600px;
+
+  @include min-breakpoint($mobile-bp) {
+    grid-template-columns: 345px 1fr;
+    gap: 50px;
+    min-height: 600px;
+    height: 80vh;
+  }
 }
 </style>

@@ -1,5 +1,8 @@
 <template>
-  <aside class="panel">
+  <aside class="panel" ref="panel">
+    <IconButton size="lg" @click="closePanel">
+      <IconSquareRoundedX />
+    </IconButton>
     <header>
       <strong>Users</strong>
       <small v-if="users.length > 0">
@@ -20,6 +23,10 @@
 <script lang="ts" setup>
 import StatusIndicator from '@/components/StatusIndicator.vue'
 import UserPanelProfile from './UserPanelProfile.vue'
+import { onClickOutside } from '@vueuse/core'
+import { IconSquareRoundedX } from '@tabler/icons-vue'
+import IconButton from '@/components/UI/IconButton.vue'
+import { ref } from 'vue'
 
 interface UserPanelProps {
   users: any[]
@@ -27,14 +34,50 @@ interface UserPanelProps {
 }
 
 defineProps<UserPanelProps>()
+const emit = defineEmits(['close'])
+
+const panel = ref(null)
+
+onClickOutside(panel, () => {
+  closePanel()
+})
+
+const closePanel = () => {
+  emit('close')
+}
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/mixins/breakpoints';
+
 .panel {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   height: inherit;
+  position: relative;
+
+  @include max-breakpoint($mobile-bp) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    border-radius: 0;
+    z-index: 10;
+    box-shadow: -15px 0 15px rgba(0, 0, 0, .1);
+  }
+
+  > button {
+    position: absolute;
+    top: .75rem;
+    right: .75rem;
+
+    @include min-breakpoint($mobile-bp) {
+      display: none;
+    }
+  }
 }
 
 header {

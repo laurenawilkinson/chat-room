@@ -17,3 +17,14 @@
 .pop-up-leave-to {
   opacity: 0;
 }
+
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: 0.3s ease;
+}
+
+.slide-left-enter-from,
+.slide-left-leave-to {
+  opacity: 0;
+  transform: translateX(50px);
+}

@@ -1,5 +1,5 @@
 <template>
-  <button :class="`icon-button ${theme}`" :type="type" :disabled="disabled">
+  <button :class="`icon-button ${theme} ${size}`" :type="type" :disabled="disabled">
     <slot />
   </button>
 </template>
@@ -9,23 +9,26 @@ interface IconButtonProps {
   type?: 'button' | 'submit'
   disabled?: boolean
   theme?: 'primary' | 'grey'
+  size?: 'sm' | 'md' | 'lg'
 }
 
 withDefaults(defineProps<IconButtonProps>(), {
   type: 'button',
-  disabled: false
+  disabled: false,
+  size: 'sm'
 })
 </script>
 
 <style lang="scss" scoped>
 .icon-button {
+  --icon-size: 1.5rem;
   all: unset;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #c0c0c0;
-  width: 30px;
-  height: 30px;
+  padding: .25rem;
 
   &:not(:disabled):hover {
     cursor: pointer;
@@ -39,11 +42,19 @@ withDefaults(defineProps<IconButtonProps>(), {
   &.primary {
     color: var(--primary-colour);
   }
+
+  &.md {
+    --icon-size: 1.75rem;
+  }
+
+  &.lg {
+    --icon-size: 2rem;
+  }
 }
 
 :deep(svg) {
-  width: 24px;
-  height: 24px;
+  width: var(--icon-size);
+  height: var(--icon-size);
   stroke-width: 2;
 }
 </style>
