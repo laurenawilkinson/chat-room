@@ -9,9 +9,10 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import type { UserStatus } from '~/types/user';
 
 interface StatusIndicatorProps {
-  status: 'online' | 'away'
+  status: UserStatus;
   showLabel?: boolean
 }
 
@@ -19,7 +20,8 @@ const props = defineProps<StatusIndicatorProps>()
 
 const statusLabels = {
   online: 'Online',
-  away: 'Away'
+  away: 'Away',
+  unknown: 'Offline'
 }
 
 const statusLabel = computed(() => statusLabels[props.status] || 'Unknown')

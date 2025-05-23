@@ -1,6 +1,6 @@
 import { WebSocket, WebSocketServer } from 'ws'
-import { type Response } from '@/types/responses'
-import { type Request } from '@/types/requests'
+import { type Response } from '~/types/responses'
+import { type Request } from '~/types/requests'
 import { createMessageResponse } from '@/helpers/message'
 
 class ServerManager {

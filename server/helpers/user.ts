@@ -1,5 +1,5 @@
 import User from '@/models/User'
-import { ActiveUserResponse, UsersResponse } from '@/types/responses'
+import { ActiveUserResponse, UsersResponse } from '~/types/responses'
 import { UserStore } from '@/types/user'
 import { getRandomNumber } from './utils'
 

@@ -5,9 +5,9 @@
     </IconButton>
     <header>
       <strong>Users</strong>
-      <small v-if="users.length > 0">
+      <small v-if="onlineUsers.length > 0">
         <StatusIndicator status="online" />
-        <span>{{ users.length }} online</span>
+        <span>{{ onlineUsers.length }} online</span>
       </small>
     </header>
     <ul>
@@ -26,14 +26,15 @@ import UserPanelProfile from './UserPanelProfile.vue'
 import { onClickOutside } from '@vueuse/core'
 import { IconSquareRoundedX } from '@tabler/icons-vue'
 import IconButton from '@/components/UI/IconButton.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import type { UserProfile } from '~/types/user'
 
 interface UserPanelProps {
-  users: any[]
-  activeUser: any
+  users: UserProfile[]
+  activeUser: UserProfile
 }
 
-defineProps<UserPanelProps>()
+const props = defineProps<UserPanelProps>()
 const emit = defineEmits(['close'])
 
 const panel = ref(null)
@@ -41,6 +42,8 @@ const panel = ref(null)
 onClickOutside(panel, () => {
   closePanel()
 })
+
+const onlineUsers = computed(() => props.users.filter(user => user.status === 'online'))
 
 const closePanel = () => {
   emit('close')

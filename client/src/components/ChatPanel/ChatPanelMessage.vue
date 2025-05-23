@@ -11,9 +11,10 @@
 <script lang="ts" setup>
 import { format, isToday } from 'date-fns'
 import { computed } from 'vue'
+import type { UserProfile } from '~/types/user'
 
 interface ChatPanelMessageProps {
-  user: any
+  user: UserProfile
   message: string
   date: string
 }

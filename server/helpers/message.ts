@@ -1,5 +1,5 @@
-import { UserProfile } from '@/types/user'
-import { MessageResponse } from '@/types/responses'
+import { UserProfile } from '~/types/user'
+import { MessageResponse } from '~/types/responses'
 
 export const createMessageResponse = (
   user: UserProfile,

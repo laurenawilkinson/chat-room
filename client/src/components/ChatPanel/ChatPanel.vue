@@ -25,9 +25,10 @@ import { computed, ref } from 'vue'
 import IconButton from '@/components/UI/IconButton.vue'
 import ChatPanelMessage from '@/components/ChatPanel/ChatPanelMessage.vue'
 import ChatPanelEmojiPicker from './ChatPanelEmojiPicker.vue'
+import type { MessageResponse } from '~/types/responses'
 
 interface ChatPanelProps {
-  messages: any[]
+  messages: MessageResponse['data'][]
 }
 
 defineProps<ChatPanelProps>()

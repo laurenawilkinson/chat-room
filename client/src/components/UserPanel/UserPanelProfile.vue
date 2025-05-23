@@ -7,9 +7,10 @@
 
 <script lang="ts" setup>
 import StatusIndicator from '@/components/StatusIndicator.vue'
+import type { UserProfile } from '~/types/user';
 
 interface UserPanelProfileProps {
-  activeUser: any
+  activeUser: UserProfile
 }
 
 defineProps<UserPanelProfileProps>()

@@ -28,6 +28,8 @@ import { IconMenu } from '@tabler/icons-vue'
 import IconButton from './components/UI/IconButton.vue'
 import { useBreakpoints, useWebSocket } from '@vueuse/core'
 import { breakpointsConfig } from './helpers/utils'
+import type { UserProfile } from '~/types/user'
+import type { ActiveUserResponse, MessageResponse, Response, UsersResponse } from '~/types/responses'
 
 const websocketURL = import.meta.env.PROD
   ? `wss://${window.location.host}`
@@ -48,12 +50,22 @@ const { send } = useWebSocket(websocketURL, {
   },
   onDisconnected: () => {
     console.error('WebSocket has disconnected')
+    activeUser.value = {
+      ...activeUser.value,
+      status: 'unknown'
+    }
+    users.value = users.value.map(user => user.id === activeUser.value.id ? { ...user, status: 'unknown' } : user)
   },
   onError: (_ws, event) => {
     console.error('WebSocket has errored', event)
+    activeUser.value = {
+      ...activeUser.value,
+      status: 'unknown'
+    }
+    users.value = users.value.map(user => user.id === activeUser.value.id ? { ...user, status: 'unknown' } : user)
   },
   onMessage: (_ws, event: MessageEvent<string>) => {
-    const response = JSON.parse(event.data)
+    const response = JSON.parse(event.data) as Response;
 
     switch (response.type) {
       case 'message':
@@ -68,9 +80,9 @@ const { send } = useWebSocket(websocketURL, {
   }
 })
 
-const users = ref<any[]>([])
-const messages = ref<any[]>([])
-const activeUser = ref({
+const users = ref<UserProfile[]>([])
+const messages = ref<MessageResponse['data'][]>([])
+const activeUser = ref<UserProfile>({
   id: '',
   username: '',
   status: 'unknown'
@@ -88,7 +100,7 @@ const sendMessage = (message: string) => {
 }
 
 // Response handlers
-const onMessage = async (data: any) => {
+const onMessage = async (data: MessageResponse['data']) => {
   const maxMessages = 30
   if (messages.value.length < maxMessages) {
     messages.value.push(data)
@@ -102,11 +114,11 @@ const onMessage = async (data: any) => {
   })
 }
 
-const onUsers = (data: any) => {
+const onUsers = (data: UsersResponse['data']) => {
   users.value = [...data.users]
 }
 
-const onActiveUser = (data: any) => {
+const onActiveUser = (data: ActiveUserResponse['data']) => {
   activeUser.value = { ...data }
 }
 </script>
