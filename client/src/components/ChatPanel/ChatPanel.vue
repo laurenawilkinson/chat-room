@@ -1,11 +1,11 @@
 <template>
   <section class="panel">
     <div class="message-list" ref="messageList">
-      <ul>
+      <TransitionGroup name="slide-up" tag="ul">
         <li v-for="(item, index) in messages" :key="index">
           <ChatPanelMessage :user="item.user" :message="item.message" :date="item.date" />
         </li>
-      </ul>
+      </TransitionGroup>
     </div>
     <form @submit.prevent="sendMessage">
       <input v-model="message" placeholder="Type a message" :maxlength="maxMessageLength" />
@@ -67,7 +67,6 @@ defineExpose({ scrollToNewestMessage })
 .panel {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   height: inherit;
 
   @include max-breakpoint($mobile-bp) {
@@ -87,6 +86,7 @@ ul {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding-bottom: 1.5rem;
 }
 
 form {
