@@ -1,10 +1,5 @@
 <template>
-  <button
-    :class="`icon-button ${theme}`"
-    :type="type"
-    :disabled="disabled"
-    @click="$emit('click', $event)"
-  >
+  <button :class="`icon-button ${theme}`" :type="type" :disabled="disabled">
     <slot />
   </button>
 </template>

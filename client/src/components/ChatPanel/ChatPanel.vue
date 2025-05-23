@@ -10,6 +10,7 @@
     <form @submit.prevent="sendMessage">
       <input v-model="message" placeholder="Type a message" :maxlength="maxMessageLength" />
       <aside>
+        <ChatPanelEmojiPicker @select="appendEmojiToMessage" />
         <IconButton type="submit" theme="primary" :disabled="!canSendMessage">
           <IconMessageForward />
         </IconButton>
@@ -23,6 +24,7 @@ import { IconMessageForward } from '@tabler/icons-vue'
 import { computed, ref } from 'vue'
 import IconButton from '@/components/UI/IconButton.vue'
 import ChatPanelMessage from '@/components/ChatPanel/ChatPanelMessage.vue'
+import ChatPanelEmojiPicker from './ChatPanelEmojiPicker.vue'
 
 interface ChatPanelProps {
   messages: any[]
@@ -43,6 +45,10 @@ const sendMessage = () => {
 
   emit('send:message', message.value)
   message.value = ''
+}
+
+const appendEmojiToMessage = (emoji: string) => {
+  message.value += emoji
 }
 
 const messageList = ref<HTMLDivElement>()
