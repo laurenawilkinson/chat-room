@@ -1,5 +1,6 @@
 <template>
   <div class="chat-panel-message" :style="{ '--user-colour': userColours[user.colour] }">
+    <ProfileImage :image="user.image" />
     <div>
       <strong>{{ user.username }}</strong>
       <small>{{ dateString }}</small>
@@ -13,6 +14,7 @@ import { format, isToday } from 'date-fns'
 import { computed } from 'vue'
 import { userColours } from '~/helpers/user'
 import type { UserProfile } from '~/types/user'
+import ProfileImage from '../UI/ProfileImage.vue'
 
 interface ChatPanelMessageProps {
   user: UserProfile
@@ -34,12 +36,19 @@ const dateString = computed(() => {
 .chat-panel-message {
   padding: 0.25rem 0.5rem;
   line-height: 1.4;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .25rem 1rem;
+
+  > figure {
+    grid-row: span 2;
+  }
 
   > div {
+    grid-column: 2;
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    margin-bottom: 0.25rem;
   }
 
   strong {
@@ -51,6 +60,10 @@ const dateString = computed(() => {
   small {
     color: #a3a3a3;
     font-size: var(--10px);
+  }
+
+  p {
+    grid-column: 2;
   }
 }
 </style>
