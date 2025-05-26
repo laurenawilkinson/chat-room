@@ -21,6 +21,13 @@
 .slide-left-enter-active,
 .slide-left-leave-active {
   transition: 0.3s ease;
+  transition-property: opacity, transform;
+}
+
+.slide-left-enter-to,
+.slide-left-leave-from {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .slide-left-enter-from,

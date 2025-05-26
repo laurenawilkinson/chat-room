@@ -10,17 +10,19 @@
     </header>
     <div class="container">
       <template v-if="isDesktop">
-        <UserPanel :users="users" :activeUser="activeUser" />
+        <UserPanel :users="users" :activeUser="activeUser" @open:settings="showUserSettings = true" />
       </template>
       <template v-else>
         <Transition name="slide-left" mode="out-in">
-          <UserPanel v-if="showUsersPanel" :users="users" :activeUser="activeUser" @close="showUsersPanel = false" />
+          <UserPanel v-if="showUsersPanel" :users="users" :activeUser="activeUser"
+            @open:settings="showUserSettings = true" @close="showUsersPanel = false" />
         </Transition>
       </template>
       <ChatPanel ref="chatPanel" :messages="messages" @send:message="sendMessage" />
     </div>
   </main>
   <SiteInfoModal :show="showInfoModal" @close="showInfoModal = false" />
+  <UserPanelSettingsModal :show="showUserSettings" :user="activeUser" @close="showUserSettings = false" />
 </template>
 
 <script lang="ts" setup>
@@ -30,6 +32,7 @@ import ChatPanel from '@/components/ChatPanel/ChatPanel.vue'
 import { IconInfoCircle, IconMenu } from '@tabler/icons-vue'
 import IconButton from './components/UI/IconButton.vue'
 import SiteInfoModal from './components/Modals/SiteInfoModal.vue'
+import UserPanelSettingsModal from './components/UserPanel/UserPanelSettingsModal.vue'
 import { useBreakpoints, useWebSocket } from '@vueuse/core'
 import { breakpointsConfig } from './helpers/utils'
 import type { UserProfile } from '~/types/user'
@@ -94,6 +97,7 @@ const activeUser = ref<UserProfile>({
   image: 'cat'
 })
 const showUsersPanel = ref(false);
+const showUserSettings = ref(false)
 const showInfoModal = ref(false);
 const breakpoints = useBreakpoints(breakpointsConfig)
 const isDesktop = breakpoints.greater('lg')
