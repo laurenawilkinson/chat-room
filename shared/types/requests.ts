@@ -2,7 +2,7 @@ export type Request = HeartbeatRequest | MessageRequest | UserRequest
 
 interface BaseRequest {
   type: string
-  data: Record<string, unknown>
+  data: unknown
 }
 
 interface HeartbeatRequest extends BaseRequest {

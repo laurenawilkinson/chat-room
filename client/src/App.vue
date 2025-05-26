@@ -1,7 +1,9 @@
 <template>
   <main>
     <header>
-      <h1>Chat Room</h1>
+      <IconButton theme="primary" @click="showInfoModal = true">
+        <IconInfoCircle />
+      </IconButton>
       <IconButton @click="showUsersPanel = true">
         <IconMenu />
       </IconButton>
@@ -18,14 +20,16 @@
       <ChatPanel ref="chatPanel" :messages="messages" @send:message="sendMessage" />
     </div>
   </main>
+  <SiteInfoModal :show="showInfoModal" @close="showInfoModal = false" />
 </template>
 
 <script lang="ts" setup>
 import { ref, nextTick } from 'vue'
 import UserPanel from '@/components/UserPanel/UserPanel.vue'
 import ChatPanel from '@/components/ChatPanel/ChatPanel.vue'
-import { IconMenu } from '@tabler/icons-vue'
+import { IconInfoCircle, IconMenu } from '@tabler/icons-vue'
 import IconButton from './components/UI/IconButton.vue'
+import SiteInfoModal from './components/Modals/SiteInfoModal.vue'
 import { useBreakpoints, useWebSocket } from '@vueuse/core'
 import { breakpointsConfig } from './helpers/utils'
 import type { UserProfile } from '~/types/user'
@@ -85,9 +89,12 @@ const messages = ref<MessageResponse['data'][]>([])
 const activeUser = ref<UserProfile>({
   id: '',
   username: '',
-  status: 'unknown'
+  status: 'unknown',
+  colour: 'orange',
+  image: 'cat'
 })
 const showUsersPanel = ref(false);
+const showInfoModal = ref(false);
 const breakpoints = useBreakpoints(breakpointsConfig)
 const isDesktop = breakpoints.greater('lg')
 const chatPanel = ref<typeof ChatPanel>()
@@ -147,19 +154,24 @@ main {
 
 header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+  gap: .5rem;
   padding: 1rem;
   background-color: white;
-  border-bottom: 2px solid var(--background-colour);
+  width: 100%;
+  border-bottom: 1px solid #eee;
 
   @include min-breakpoint($mobile-bp) {
-    display: none;
-  }
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: transparent;
+    border: 0;
 
-  h1 {
-    color: var(--primary-colour);
-    font-size: var(--20px);
+    button:last-of-type {
+      display: none;
+    }
   }
 }
 

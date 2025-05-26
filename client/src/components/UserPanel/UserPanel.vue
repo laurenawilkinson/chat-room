@@ -16,8 +16,9 @@
         {{ user.username }} <template v-if="user.id === activeUser.id">(You)</template>
       </li>
     </ul>
-    <UserPanelProfile :activeUser="activeUser" />
+    <UserPanelProfile :activeUser="activeUser" @click:settings="showUserSettings = true" />
   </aside>
+  <UserPanelSettingsModal :show="showUserSettings" :user="activeUser" @close="showUserSettings = false" />
 </template>
 
 <script lang="ts" setup>
@@ -28,6 +29,7 @@ import { IconSquareRoundedX } from '@tabler/icons-vue'
 import IconButton from '@/components/UI/IconButton.vue'
 import { computed, ref } from 'vue'
 import type { UserProfile } from '~/types/user'
+import UserPanelSettingsModal from './UserPanelSettingsModal.vue'
 
 interface UserPanelProps {
   users: UserProfile[]
@@ -38,6 +40,7 @@ const props = defineProps<UserPanelProps>()
 const emit = defineEmits(['close'])
 
 const panel = ref(null)
+const showUserSettings = ref(false)
 
 onClickOutside(panel, () => {
   closePanel()

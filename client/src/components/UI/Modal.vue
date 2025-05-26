@@ -2,7 +2,7 @@
   <Teleport to="#modal-container">
     <Transition name="modal">
       <div v-if="show" class="modal">
-        <div class="modal-inner" ref="modalRef" @click.stop.prevent>
+        <div class="modal-inner" ref="modalRef" @click.stop>
           <IconButton size="md" @click="closeModal">
             <IconSquareRoundedX />
           </IconButton>

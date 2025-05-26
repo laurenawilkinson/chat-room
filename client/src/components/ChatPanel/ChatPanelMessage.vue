@@ -1,7 +1,7 @@
 <template>
-  <div class="chat-panel-message">
+  <div class="chat-panel-message" :style="{ '--user-colour': userColours[user.colour] }">
     <div>
-      <strong :style="{ color: user.colour }">{{ user.username }}</strong>
+      <strong>{{ user.username }}</strong>
       <small>{{ dateString }}</small>
     </div>
     <p>{{ message }}</p>
@@ -11,6 +11,7 @@
 <script lang="ts" setup>
 import { format, isToday } from 'date-fns'
 import { computed } from 'vue'
+import { userColours } from '~/helpers/user'
 import type { UserProfile } from '~/types/user'
 
 interface ChatPanelMessageProps {
@@ -44,6 +45,7 @@ const dateString = computed(() => {
   strong {
     font-size: var(--14px);
     font-weight: var(--font-weight-bold);
+    color: var(--user-colour);
   }
 
   small {
