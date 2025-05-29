@@ -2,6 +2,10 @@ import { WebSocket, WebSocketServer } from 'ws'
 import { type Response } from '~/types/responses'
 import { type Request } from '~/types/requests'
 import { createMessageResponse } from '@/helpers/message'
+import {
+  createActiveUserResponse,
+  createUsersListResponse,
+} from '@/helpers/user'
 
 class ServerManager {
   public ws: WebSocketServer
@@ -41,6 +45,13 @@ class ServerManager {
             )
             this.broadcast(res)
             break
+          case 'profile':
+            const updatedUser = userManager.updateUserProfile(
+              user.id,
+              request.data
+            )
+            this.broadcastTo(user.client, createActiveUserResponse(updatedUser))
+            this.broadcast(createUsersListResponse(userManager.users))
         }
       } catch (e) {
         console.error('Error parsing request', e)

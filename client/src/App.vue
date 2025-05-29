@@ -22,7 +22,8 @@
     </div>
   </main>
   <SiteInfoModal :show="showInfoModal" @close="showInfoModal = false" />
-  <UserPanelSettingsModal :show="showUserSettings" :user="activeUser" @close="showUserSettings = false" />
+  <UserPanelSettingsModal :show="showUserSettings" :user="activeUser" @submit="sendUserProfileData"
+    @close="showUserSettings = false" />
 </template>
 
 <script lang="ts" setup>
@@ -35,8 +36,10 @@ import SiteInfoModal from './components/Modals/SiteInfoModal.vue'
 import UserPanelSettingsModal from './components/Modals/UserSettingsModal.vue'
 import { useBreakpoints, useWebSocket } from '@vueuse/core'
 import { breakpointsConfig } from './helpers/utils'
-import type { UserProfile } from '~/types/user'
+import type { EditableUserProfile } from '~/types/user'
 import type { ActiveUserResponse, MessageResponse, Response, UsersResponse } from '~/types/responses'
+import User from './models/User'
+import type { Message } from './types/message'
 
 const websocketURL = import.meta.env.PROD
   ? `wss://${window.location.host}`
@@ -57,19 +60,11 @@ const { send } = useWebSocket(websocketURL, {
   },
   onDisconnected: () => {
     console.error('WebSocket has disconnected')
-    activeUser.value = {
-      ...activeUser.value,
-      status: 'unknown'
-    }
-    users.value = users.value.map(user => user.id === activeUser.value.id ? { ...user, status: 'unknown' } : user)
+    onUserDisconnect()
   },
   onError: (_ws, event) => {
     console.error('WebSocket has errored', event)
-    activeUser.value = {
-      ...activeUser.value,
-      status: 'unknown'
-    }
-    users.value = users.value.map(user => user.id === activeUser.value.id ? { ...user, status: 'unknown' } : user)
+    onUserDisconnect()
   },
   onMessage: (_ws, event: MessageEvent<string>) => {
     const response = JSON.parse(event.data) as Response;
@@ -87,15 +82,15 @@ const { send } = useWebSocket(websocketURL, {
   }
 })
 
-const users = ref<UserProfile[]>([])
-const messages = ref<MessageResponse['data'][]>([])
-const activeUser = ref<UserProfile>({
+const users = ref<User[]>([])
+const messages = ref<Message[]>([])
+const activeUser = ref<User>(new User({
   id: '',
-  username: '',
+  username: 'Anonymous',
   status: 'unknown',
   colour: 'orange',
   image: 'cat'
-})
+}))
 const showUsersPanel = ref(false);
 const showUserSettings = ref(false)
 const showInfoModal = ref(false);
@@ -110,14 +105,23 @@ const sendMessage = (message: string) => {
   sendData({ type: 'message', data: { message } })
 }
 
+const sendUserProfileData = (data: EditableUserProfile) => {
+  sendData({ type: 'profile', data })
+  showUserSettings.value = false
+}
+
 // Response handlers
 const onMessage = async (data: MessageResponse['data']) => {
   const maxMessages = 30
+  const message: Message = {
+    ...data,
+    user: new User(data.user)
+  }
   if (messages.value.length < maxMessages) {
-    messages.value.push(data)
+    messages.value.push(message)
   } else {
     messages.value.shift()
-    messages.value.push(data)
+    messages.value.push(message)
   }
 
   nextTick(() => {
@@ -126,11 +130,19 @@ const onMessage = async (data: MessageResponse['data']) => {
 }
 
 const onUsers = (data: UsersResponse['data']) => {
-  users.value = [...data.users]
+  users.value = [...data.users.map(user => new User(user))]
 }
 
 const onActiveUser = (data: ActiveUserResponse['data']) => {
-  activeUser.value = { ...data }
+  activeUser.value = new User(data)
+}
+
+const onUserDisconnect = () => {
+  activeUser.value = new User({
+    ...activeUser.value,
+    status: 'unknown'
+  })
+  users.value = users.value.map(user => user.id === activeUser.value.id ? new User({ ...user, status: 'unknown' }) : user)
 }
 </script>
 

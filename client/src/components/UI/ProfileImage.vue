@@ -24,9 +24,11 @@ figure {
   border-radius: var(--profile-image-size, 2.5rem);
   width: var(--profile-image-size, 2.5rem);
   height: var(--profile-image-size, 2.5rem);
-  padding: .35rem;
+  padding: .45rem;
   border: 2px solid var(--user-colour);
   position: relative;
+  transition: .2s ease-out;
+  aspect-ratio: 1;
 
   &::after {
     content: '';
@@ -35,14 +37,14 @@ figure {
     border-radius: inherit;
     background-color: var(--user-colour);
     opacity: .1;
+    transition: .2s ease-out;
   }
 
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
-    border-radius: inherit;
   }
 }
 </style>

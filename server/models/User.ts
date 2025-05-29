@@ -1,4 +1,10 @@
-import { UserColour, UserImage, UserProfile, UserStatus } from '~/types/user'
+import {
+  EditableUserProfile,
+  UserColour,
+  UserImage,
+  UserProfile,
+  UserStatus,
+} from '~/types/user'
 import { WebSocket } from 'ws'
 import { v4 as uuidv4 } from 'uuid'
 import { generateAnonUser } from '@/helpers/user'
@@ -21,16 +27,10 @@ class User implements UserProfile {
     this.colour = colour
   }
 
-  setUsername = (username: string) => {
-    this.username = username
-  }
-
-  setColour = (colour: string) => {
-    this.colour = colour
-  }
-
-  setImage = (image: UserImage) => {
-    this.image = image
+  setProfileData = (profileData: EditableUserProfile) => {
+    if (profileData.username) this.username = profileData.username
+    if (profileData.colour) this.colour = profileData.colour
+    if (profileData.image) this.image = profileData.image
   }
 
   toJSON = (): UserProfile => {

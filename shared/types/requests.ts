@@ -1,4 +1,6 @@
-export type Request = HeartbeatRequest | MessageRequest | UserRequest
+import { EditableUserProfile } from './user'
+
+export type Request = HeartbeatRequest | MessageRequest | UserProfileRequest
 
 interface BaseRequest {
   type: string
@@ -19,7 +21,7 @@ interface MessageRequest extends BaseRequest {
   }
 }
 
-interface UserRequest extends BaseRequest {
-  type: 'user'
-  data: {}
+interface UserProfileRequest extends BaseRequest {
+  type: 'profile'
+  data: EditableUserProfile
 }

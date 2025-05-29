@@ -13,11 +13,11 @@
 import { format, isToday } from 'date-fns'
 import { computed } from 'vue'
 import { userColours } from '~/helpers/user'
-import type { UserProfile } from '~/types/user'
+import type User from '@/models/User'
 import ProfileImage from '../UI/ProfileImage.vue'
 
 interface ChatPanelMessageProps {
-  user: UserProfile
+  user: User
   message: string
   date: string
 }
