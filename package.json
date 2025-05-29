@@ -17,8 +17,5 @@
   "bugs": {
     "url": "https://github.com/laurenawilkinson/chat-room/issues"
   },
-  "homepage": "https://github.com/laurenawilkinson/chat-room#readme",
-  "dependencies": {
-    "obscenity": "^0.4.3"
-  }
+  "homepage": "https://github.com/laurenawilkinson/chat-room#readme"
 }
