@@ -24,4 +24,8 @@ legend {
   color: #686868;
   margin-bottom: .75rem;
 }
+
+:deep(.form-error) {
+  margin-top: .5rem;
+}
 </style>

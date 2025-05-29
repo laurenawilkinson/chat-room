@@ -1,3 +1,4 @@
+import { getAnimalFromImage } from '@/helpers/user'
 import type { UserColour, UserImage, UserProfile, UserStatus } from '~/types/user'
 
 class User implements UserProfile {
@@ -20,9 +21,7 @@ class User implements UserProfile {
   }
 
   get username() {
-    const capitalisedAnimal = this.image.charAt(0).toUpperCase() + this.image.slice(1)
-
-    return this.isAnonymous() ? `Anonymous ${capitalisedAnimal}` : this._username
+    return this.isAnonymous() ? `Anonymous ${getAnimalFromImage(this.image)}` : this._username
   }
 }
 

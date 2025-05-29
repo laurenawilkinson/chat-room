@@ -2,7 +2,6 @@
   "name": "chat-room",
   "version": "1.0.0",
   "description": "Websocket driven chat room",
-  "devDependencies": {},
   "scripts": {
     "prebuild": "cd client && npm ci && npm run build-only",
     "build": "cd server && npm ci",
@@ -18,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/laurenawilkinson/chat-room/issues"
   },
-  "homepage": "https://github.com/laurenawilkinson/chat-room#readme"
+  "homepage": "https://github.com/laurenawilkinson/chat-room#readme",
+  "dependencies": {
+    "obscenity": "^0.4.3"
+  }
 }

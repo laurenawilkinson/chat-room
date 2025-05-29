@@ -1,6 +1,8 @@
 <template>
   <Modal :show="show">
-    <form>
+    <form @submit.prevent>
+      <UserSettingsProfileUsername v-model="form.username" :image="form.image" :isAnonymous="user.isAnonymous()"
+        :error="usernameError" />
       <UserSettingsProfileImage v-model="form.image" :colour="form.colour" />
       <UserSettingsProfileColour v-model="form.colour" />
     </form>
@@ -17,8 +19,11 @@ import Modal from '../UI/Modal.vue';
 import Button from '../UI/Button.vue';
 import type User from '@/models/User';
 import UserSettingsProfileImage from '../UserSettings/UserSettingsProfileImage.vue';
-import { reactive, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import UserSettingsProfileColour from '../UserSettings/UserSettingsProfileColour.vue';
+import UserSettingsProfileUsername from '../UserSettings/UserSettingsProfileUsername.vue';
+import { usernameMaxLength } from '@/helpers/user';
+import { hasProfanity } from '@/helpers/utils';
 
 interface UserPanelSettingsModalProps extends ModalProps {
   user: User;
@@ -32,6 +37,7 @@ const form = reactive({
   colour: props.user.colour,
   image: props.user.image,
 })
+const usernameError = ref('')
 
 const resetForm = () => {
   form.username = props.user._username
@@ -49,7 +55,24 @@ watch(
 )
 
 const submitForm = () => {
-  emit('submit', form)
+  usernameError.value = ''
+  const username = !form.username ? 'Anonymous' : form.username;
+
+  // Validate username
+  if (username.length > usernameMaxLength) {
+    usernameError.value = `Must be less than ${usernameMaxLength} characters`
+    return
+  }
+
+  if (hasProfanity(username)) {
+    usernameError.value = 'Username not allowed'
+    return
+  }
+
+  emit('submit', {
+    ...form,
+    username,
+  })
 }
 </script>
 
