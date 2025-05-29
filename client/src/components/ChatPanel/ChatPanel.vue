@@ -8,7 +8,7 @@
       </TransitionGroup>
     </div>
     <form @submit.prevent="sendMessage">
-      <input v-model="message" placeholder="Type a message" :maxlength="maxMessageLength" />
+      <input v-model.trim="message" placeholder="Type a message" :maxlength="maxMessageLength" />
       <aside>
         <ChatPanelEmojiPicker @select="appendEmojiToMessage" />
         <IconButton type="submit" theme="primary" :disabled="!canSendMessage">
@@ -26,6 +26,7 @@ import IconButton from '@/components/UI/IconButton.vue'
 import ChatPanelMessage from '@/components/ChatPanel/ChatPanelMessage.vue'
 import ChatPanelEmojiPicker from './ChatPanelEmojiPicker.vue'
 import type { Message } from '@/types/message'
+import { censorProfanity } from '@/helpers/utils'
 
 interface ChatPanelProps {
   messages: Message[]
@@ -44,7 +45,7 @@ const canSendMessage = computed(
 const sendMessage = () => {
   if (!canSendMessage.value) return
 
-  emit('send:message', message.value)
+  emit('send:message', censorProfanity(message.value))
   message.value = ''
 }
 
