@@ -21,12 +21,10 @@ export const generateAnonUser = (): {
   colour: UserColour
 } => {
   const randomAnimal = getRandomArrayItem(userImages)
-  const capitalisedAnimal =
-    randomAnimal.charAt(0).toUpperCase() + randomAnimal.slice(1)
   const randomColour = getRandomArrayItem(Object.keys(userColours))
 
   return {
-    username: `Anonymous ${capitalisedAnimal}`,
+    username: 'Anonymous',
     image: randomAnimal,
     colour: randomColour,
   }

@@ -7,13 +7,14 @@ export type UserImage =
   | 'dog'
   | 'elephant'
   | 'fish'
+  | 'flamingo'
   | 'frog'
   | 'giraffe'
-  | 'koala'
+  | 'monkey'
   | 'panda'
   | 'penguin'
-  | 'seal'
   | 'sheep'
+  | 'toucan'
   | 'turtle'
   | 'whale'
 
@@ -26,3 +27,7 @@ export interface UserProfile {
   colour: UserColour
   image: UserImage
 }
+
+export type EditableUserProfile = Partial<
+  Pick<UserProfile, 'username' | 'colour' | 'image'>
+>
