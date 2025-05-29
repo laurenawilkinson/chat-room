@@ -2,6 +2,7 @@
   <Modal :show="show">
     <form>
       <UserSettingsProfileImage v-model="form.image" :colour="form.colour" />
+      <UserSettingsProfileColour v-model="form.colour" />
     </form>
     <template #footer="{ close }">
       <Button theme="grey" variant="ghost" @click="close">Cancel</Button>
@@ -17,6 +18,7 @@ import Button from '../UI/Button.vue';
 import type User from '@/models/User';
 import UserSettingsProfileImage from '../UserSettings/UserSettingsProfileImage.vue';
 import { reactive, watch } from 'vue';
+import UserSettingsProfileColour from '../UserSettings/UserSettingsProfileColour.vue';
 
 interface UserPanelSettingsModalProps extends ModalProps {
   user: User;
@@ -50,3 +52,11 @@ const submitForm = () => {
   emit('submit', form)
 }
 </script>
+
+<style lang="scss" scoped>
+form {
+  fieldset + fieldset {
+    margin-top: 2rem;
+  }
+}
+</style>
