@@ -45,6 +45,8 @@ const closeModal = () => {
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/mixins/ui';
+
 .modal {
   position: fixed;
   top: 0;
@@ -67,7 +69,7 @@ const closeModal = () => {
     max-height: 90vh;
     display: flex;
     flex-direction: column;
-    padding: 2.5rem 2rem 1.5rem;
+    padding: 2.5rem 1rem 1.5rem 2rem;
 
     > button {
       position: absolute;
@@ -78,12 +80,15 @@ const closeModal = () => {
 
   &-body {
     padding-bottom: 1rem;
+    padding-right: 1rem;
     flex: 1;
     overflow-y: auto;
+    @include rounded-scrollbar;
   }
 
   &-footer {
     padding-top: 1rem;
+    padding-right: 1rem;
     display: flex;
     gap: .5rem;
     justify-content: flex-end;

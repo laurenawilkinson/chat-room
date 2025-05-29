@@ -64,6 +64,7 @@ defineExpose({ scrollToNewestMessage })
 
 <style lang="scss" scoped>
 @import '@/styles/mixins/breakpoints';
+@import '@/styles/mixins/ui';
 
 .panel {
   display: flex;
@@ -81,6 +82,7 @@ defineExpose({ scrollToNewestMessage })
   overflow-y: auto;
   display: flex;
   flex-direction: column-reverse;
+  @include rounded-scrollbar;
 }
 
 ul {

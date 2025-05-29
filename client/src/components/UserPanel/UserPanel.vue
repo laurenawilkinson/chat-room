@@ -52,6 +52,7 @@ const closePanel = () => {
 
 <style lang="scss" scoped>
 @import '@/styles/mixins/breakpoints';
+@import '@/styles/mixins/ui';
 
 .panel {
   display: flex;
@@ -105,6 +106,7 @@ header {
 ul {
   flex: 1;
   overflow-y: auto;
+  @include rounded-scrollbar;
 }
 
 li {
