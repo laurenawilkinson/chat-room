@@ -8,7 +8,7 @@ export type Response =
 
 interface BaseResponse {
   type: string
-  data: Record<string, unknown>
+  data: unknown
 }
 
 export interface HeartbeatResponse extends BaseResponse {

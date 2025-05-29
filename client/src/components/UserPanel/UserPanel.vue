@@ -16,7 +16,7 @@
         {{ user.username }} <template v-if="user.id === activeUser.id">(You)</template>
       </li>
     </ul>
-    <UserPanelProfile :activeUser="activeUser" />
+    <UserPanelProfile :activeUser="activeUser" @click:settings="$emit('open:settings')" />
   </aside>
 </template>
 
@@ -35,7 +35,7 @@ interface UserPanelProps {
 }
 
 const props = defineProps<UserPanelProps>()
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'open:settings'])
 
 const panel = ref(null)
 

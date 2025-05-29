@@ -15,7 +15,8 @@ interface IconButtonProps {
 withDefaults(defineProps<IconButtonProps>(), {
   type: 'button',
   disabled: false,
-  size: 'sm'
+  size: 'sm',
+  theme: 'grey'
 })
 </script>
 
@@ -27,11 +28,29 @@ withDefaults(defineProps<IconButtonProps>(), {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #c0c0c0;
+  color: var(--icon-button-theme);
   padding: .25rem;
+  border-radius: .75rem;
+  position: relative;
 
   &:not(:disabled):hover {
     cursor: pointer;
+  }
+
+  &:focus-visible {
+    outline: 2px solid black;
+    border-radius: inherit;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    transition: .2s ease-out;
+    border-radius: inherit;
+    background-color: var(--icon-button-theme);
+    opacity: 0;
+    transform: scale(.8);
   }
 
   &:disabled {
@@ -39,10 +58,23 @@ withDefaults(defineProps<IconButtonProps>(), {
     opacity: 0.5;
   }
 
-  &.primary {
-    color: var(--primary-colour);
+  &:not(:disabled):hover {
+    &::after {
+      opacity: .1;
+      transform: scale(1);
+    }
   }
 
+  /* Themes */
+  &.primary {
+    --icon-button-theme: var(--primary-colour);
+  }
+
+  &.grey {
+    --icon-button-theme: #c0c0c0;
+  }
+
+  /* Sizes */
   &.md {
     --icon-size: 1.75rem;
   }

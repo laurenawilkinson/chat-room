@@ -1,35 +1,45 @@
 <template>
   <main>
     <header>
-      <h1>Chat Room</h1>
+      <IconButton theme="primary" @click="showInfoModal = true">
+        <IconInfoCircle />
+      </IconButton>
       <IconButton @click="showUsersPanel = true">
         <IconMenu />
       </IconButton>
     </header>
     <div class="container">
       <template v-if="isDesktop">
-        <UserPanel :users="users" :activeUser="activeUser" />
+        <UserPanel :users="users" :activeUser="activeUser" @open:settings="showUserSettings = true" />
       </template>
       <template v-else>
         <Transition name="slide-left" mode="out-in">
-          <UserPanel v-if="showUsersPanel" :users="users" :activeUser="activeUser" @close="showUsersPanel = false" />
+          <UserPanel v-if="showUsersPanel" :users="users" :activeUser="activeUser"
+            @open:settings="showUserSettings = true" @close="showUsersPanel = false" />
         </Transition>
       </template>
       <ChatPanel ref="chatPanel" :messages="messages" @send:message="sendMessage" />
     </div>
   </main>
+  <SiteInfoModal :show="showInfoModal" @close="showInfoModal = false" />
+  <UserPanelSettingsModal :show="showUserSettings" :user="activeUser" @submit="sendUserProfileData"
+    @close="showUserSettings = false" />
 </template>
 
 <script lang="ts" setup>
 import { ref, nextTick } from 'vue'
 import UserPanel from '@/components/UserPanel/UserPanel.vue'
 import ChatPanel from '@/components/ChatPanel/ChatPanel.vue'
-import { IconMenu } from '@tabler/icons-vue'
+import { IconInfoCircle, IconMenu } from '@tabler/icons-vue'
 import IconButton from './components/UI/IconButton.vue'
+import SiteInfoModal from './components/Modals/SiteInfoModal.vue'
+import UserPanelSettingsModal from './components/Modals/UserSettingsModal.vue'
 import { useBreakpoints, useWebSocket } from '@vueuse/core'
 import { breakpointsConfig } from './helpers/utils'
-import type { UserProfile } from '~/types/user'
+import type { EditableUserProfile } from '~/types/user'
 import type { ActiveUserResponse, MessageResponse, Response, UsersResponse } from '~/types/responses'
+import User from './models/User'
+import type { Message } from './types/message'
 
 const websocketURL = import.meta.env.PROD
   ? `wss://${window.location.host}`
@@ -50,19 +60,11 @@ const { send } = useWebSocket(websocketURL, {
   },
   onDisconnected: () => {
     console.error('WebSocket has disconnected')
-    activeUser.value = {
-      ...activeUser.value,
-      status: 'unknown'
-    }
-    users.value = users.value.map(user => user.id === activeUser.value.id ? { ...user, status: 'unknown' } : user)
+    onUserDisconnect()
   },
   onError: (_ws, event) => {
     console.error('WebSocket has errored', event)
-    activeUser.value = {
-      ...activeUser.value,
-      status: 'unknown'
-    }
-    users.value = users.value.map(user => user.id === activeUser.value.id ? { ...user, status: 'unknown' } : user)
+    onUserDisconnect()
   },
   onMessage: (_ws, event: MessageEvent<string>) => {
     const response = JSON.parse(event.data) as Response;
@@ -80,14 +82,18 @@ const { send } = useWebSocket(websocketURL, {
   }
 })
 
-const users = ref<UserProfile[]>([])
-const messages = ref<MessageResponse['data'][]>([])
-const activeUser = ref<UserProfile>({
+const users = ref<User[]>([])
+const messages = ref<Message[]>([])
+const activeUser = ref<User>(new User({
   id: '',
-  username: '',
-  status: 'unknown'
-})
+  username: 'Anonymous',
+  status: 'unknown',
+  colour: 'orange',
+  image: 'cat'
+}))
 const showUsersPanel = ref(false);
+const showUserSettings = ref(false)
+const showInfoModal = ref(false);
 const breakpoints = useBreakpoints(breakpointsConfig)
 const isDesktop = breakpoints.greater('lg')
 const chatPanel = ref<typeof ChatPanel>()
@@ -99,14 +105,23 @@ const sendMessage = (message: string) => {
   sendData({ type: 'message', data: { message } })
 }
 
+const sendUserProfileData = (data: EditableUserProfile) => {
+  sendData({ type: 'profile', data })
+  showUserSettings.value = false
+}
+
 // Response handlers
 const onMessage = async (data: MessageResponse['data']) => {
   const maxMessages = 30
+  const message: Message = {
+    ...data,
+    user: new User(data.user)
+  }
   if (messages.value.length < maxMessages) {
-    messages.value.push(data)
+    messages.value.push(message)
   } else {
     messages.value.shift()
-    messages.value.push(data)
+    messages.value.push(message)
   }
 
   nextTick(() => {
@@ -115,11 +130,19 @@ const onMessage = async (data: MessageResponse['data']) => {
 }
 
 const onUsers = (data: UsersResponse['data']) => {
-  users.value = [...data.users]
+  users.value = [...data.users.map(user => new User(user))]
 }
 
 const onActiveUser = (data: ActiveUserResponse['data']) => {
-  activeUser.value = { ...data }
+  activeUser.value = new User(data)
+}
+
+const onUserDisconnect = () => {
+  activeUser.value = new User({
+    ...activeUser.value,
+    status: 'unknown'
+  })
+  users.value = users.value.map(user => user.id === activeUser.value.id ? new User({ ...user, status: 'unknown' }) : user)
 }
 </script>
 
@@ -147,19 +170,24 @@ main {
 
 header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+  gap: .5rem;
   padding: 1rem;
   background-color: white;
-  border-bottom: 2px solid var(--background-colour);
+  width: 100%;
+  border-bottom: 1px solid #eee;
 
   @include min-breakpoint($mobile-bp) {
-    display: none;
-  }
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: transparent;
+    border: 0;
 
-  h1 {
-    color: var(--primary-colour);
-    font-size: var(--20px);
+    button:last-of-type {
+      display: none;
+    }
   }
 }
 
