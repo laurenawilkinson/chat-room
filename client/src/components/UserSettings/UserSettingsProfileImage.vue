@@ -40,10 +40,4 @@ const modelValue = useVModel(props, 'modelValue', emit)
     }
   }
 }
-
-label:not(.selected) {
-  figure {
-    --user-colour: #eee;
-  }
-}
 </style>

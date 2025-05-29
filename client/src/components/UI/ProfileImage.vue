@@ -25,7 +25,7 @@ figure {
   width: var(--profile-image-size, 2.5rem);
   height: var(--profile-image-size, 2.5rem);
   padding: .45rem;
-  border: 2px solid var(--user-colour);
+  border: 2px solid var(--user-colour, #eee);
   position: relative;
   transition: .2s ease-out;
   aspect-ratio: 1;
@@ -35,7 +35,7 @@ figure {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background-color: var(--user-colour);
+    background-color: var(--user-colour, #eee);
     opacity: .1;
     transition: .2s ease-out;
   }
