@@ -11,9 +11,11 @@
       </small>
     </header>
     <ul>
-      <li v-for="user in users" :key="user.id">
+      <li v-for="user in orderedUsers" :key="user.id">
         <StatusIndicator :status="user.status" />
-        {{ user.username }} <template v-if="user.id === activeUser.id">(You)</template>
+        <strong>
+          {{ user.username }} <span v-if="user.id === activeUser.id">(You)</span>
+        </strong>
       </li>
     </ul>
     <UserPanelProfile :activeUser="activeUser" @click:settings="$emit('open:settings')" />
@@ -27,7 +29,7 @@ import { onClickOutside } from '@vueuse/core'
 import { IconSquareRoundedX } from '@tabler/icons-vue'
 import IconButton from '@/components/UI/IconButton.vue'
 import { computed, ref } from 'vue'
-import type { UserProfile } from '~/types/user'
+import type { UserProfile, UserStatus } from '~/types/user'
 
 interface UserPanelProps {
   users: UserProfile[]
@@ -44,6 +46,15 @@ onClickOutside(panel, () => {
 })
 
 const onlineUsers = computed(() => props.users.filter(user => user.status === 'online'))
+
+const orderedUsers = computed(() => [...props.users].sort((a, b) => {
+  const getOrder = (status: UserStatus) => {
+    if (status === 'online') return 0
+    if (status === 'away') return 1
+    return 2
+  }
+  return getOrder(a.status) - getOrder(b.status)
+}))
 
 const closePanel = () => {
   emit('close')
@@ -84,6 +95,10 @@ const closePanel = () => {
   }
 }
 
+.status-indicator {
+  padding-bottom: 1px;
+}
+
 header {
   display: flex;
   align-items: center;
@@ -100,6 +115,10 @@ header {
     gap: 0.5rem;
     font-size: var(--14px);
     font-weight: var(--font-weight-semibold);
+
+    span {
+      opacity: .6;
+    }
   }
 }
 
@@ -113,8 +132,15 @@ li {
   display: flex;
   align-items: center;
   gap: var(--10px);
-  font-weight: var(--font-weight-medium);
   padding-block: 1rem;
   font-size: var(--14px);
+
+  strong {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  span {
+    font-weight: normal;
+  }
 }
 </style>
