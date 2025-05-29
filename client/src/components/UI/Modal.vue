@@ -64,6 +64,10 @@ const closeModal = () => {
     position: relative;
     border-radius: 1rem;
     margin: 1rem;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem 2rem 1.5rem;
 
     > button {
       position: absolute;
@@ -73,21 +77,18 @@ const closeModal = () => {
   }
 
   &-body {
-    padding: 2.5rem 2rem;
+    padding-bottom: 1rem;
+    flex: 1;
+    overflow-y: auto;
   }
 
   &-footer {
-    padding: 1rem 2rem 1.5rem;
+    padding-top: 1rem;
     display: flex;
     gap: .5rem;
     justify-content: flex-end;
     flex-wrap: wrap;
-  }
-
-  &:has(.modal-footer) {
-    .modal-body {
-      padding-bottom: 1rem;
-    }
+    flex-shrink: 0;
   }
 }
 </style>
