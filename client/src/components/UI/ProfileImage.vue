@@ -29,6 +29,7 @@ figure {
   position: relative;
   transition: .2s ease-out;
   aspect-ratio: 1;
+  user-select: none;
 
   &::after {
     content: '';

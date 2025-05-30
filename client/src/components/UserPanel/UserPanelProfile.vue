@@ -1,6 +1,6 @@
 <template>
   <div class="user-panel-profile" :style="{ '--user-colour': userColours[activeUser.colour] }">
-    <ProfileImage :image="activeUser.image" />
+    <ProfileImage :image="activeUser.image" @click="$emit('click:settings')" />
     <div>
       <strong>{{ activeUser.username }}</strong>
       <StatusIndicator :status="activeUser.status" showLabel />
@@ -35,6 +35,7 @@ defineEmits(['click:settings'])
 
   figure {
     flex-shrink: 0;
+    cursor: pointer;
   }
 
   > div {
