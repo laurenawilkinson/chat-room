@@ -22,7 +22,7 @@
     </div>
   </main>
   <SiteInfoModal :show="showInfoModal" @close="showInfoModal = false" />
-  <UserPanelSettingsModal :show="showUserSettings" :user="activeUser" @submit="sendUserProfileData"
+  <UserSettingsModal :show="showUserSettings" :user="activeUser" @submit="sendUserProfileData"
     @close="showUserSettings = false" />
 </template>
 
@@ -33,7 +33,7 @@ import ChatPanel from '@/components/ChatPanel/ChatPanel.vue'
 import { IconInfoCircle, IconMenu } from '@tabler/icons-vue'
 import IconButton from './components/UI/IconButton.vue'
 import SiteInfoModal from './components/Modals/SiteInfoModal.vue'
-import UserPanelSettingsModal from './components/Modals/UserSettingsModal.vue'
+import UserSettingsModal from './components/Modals/UserSettingsModal.vue'
 import { useBreakpoints, useWebSocket } from '@vueuse/core'
 import { breakpointsConfig } from './helpers/utils'
 import type { EditableUserProfile } from '~/types/user'
@@ -136,11 +136,10 @@ const onActiveUser = (data: ActiveUserResponse['data']) => {
 }
 
 const onUserDisconnect = () => {
-  activeUser.value = new User({
-    ...activeUser.value,
-    status: 'unknown'
+  activeUser.value.status = 'unknown'
+  users.value.forEach(user => {
+    if (user.id === activeUser.value.id) user.status = 'unknown'
   })
-  users.value = users.value.map(user => user.id === activeUser.value.id ? new User({ ...user, status: 'unknown' }) : user)
 }
 </script>
 

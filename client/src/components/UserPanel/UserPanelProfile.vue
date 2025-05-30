@@ -16,11 +16,11 @@ import StatusIndicator from '@/components/StatusIndicator.vue'
 import { IconSettings } from '@tabler/icons-vue'
 import IconButton from '../UI/IconButton.vue';
 import ProfileImage from '../UI/ProfileImage.vue';
-import type { UserProfile } from '~/types/user';
+import type User from '@/models/User';
 import { userColours } from '~/helpers/user';
 
 interface UserPanelProfileProps {
-  activeUser: UserProfile
+  activeUser: User
 }
 
 defineProps<UserPanelProfileProps>()

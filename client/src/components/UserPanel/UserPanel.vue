@@ -29,11 +29,12 @@ import { onClickOutside } from '@vueuse/core'
 import { IconSquareRoundedX } from '@tabler/icons-vue'
 import IconButton from '@/components/UI/IconButton.vue'
 import { computed, ref } from 'vue'
-import type { UserProfile, UserStatus } from '~/types/user'
+import type { UserStatus } from '~/types/user'
+import type User from '@/models/User'
 
 interface UserPanelProps {
-  users: UserProfile[]
-  activeUser: UserProfile
+  users: User[]
+  activeUser: User
 }
 
 const props = defineProps<UserPanelProps>()
