@@ -1,4 +1,4 @@
-import { EditableUserProfile } from './user'
+import type { EditableUserProfile } from './user'
 
 export type Request = HeartbeatRequest | MessageRequest | UserProfileRequest
 

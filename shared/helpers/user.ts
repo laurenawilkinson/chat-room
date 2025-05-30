@@ -1,4 +1,4 @@
-import { UserImage } from '../types/user'
+import type { UserImage } from '../types/user'
 
 export const userImages: UserImage[] = [
   'cat',
