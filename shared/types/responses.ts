@@ -1,8 +1,10 @@
+import { MessageData } from './message'
 import { UserProfile } from './user'
 
 export type Response =
   | HeartbeatResponse
   | MessageResponse
+  | MessageListResponse
   | UsersResponse
   | ActiveUserResponse
 
@@ -22,18 +24,19 @@ export interface HeartbeatResponse extends BaseResponse {
 
 export interface MessageResponse extends BaseResponse {
   type: 'message'
-  data: {
-    user: UserProfile
-    message: string
-    date: string
-  }
+  data: MessageData
+}
+
+export interface MessageListResponse extends BaseResponse {
+  type: 'messages'
+  data: MessageData[]
 }
 
 //--- Users
 
 export interface UsersResponse extends BaseResponse {
   type: 'users'
-  data: { users: UserProfile[] }
+  data: UserProfile[]
 }
 
 export interface ActiveUserResponse extends BaseResponse {

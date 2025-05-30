@@ -3,6 +3,7 @@ import express from 'express'
 import path from 'path'
 import ServerManager from '@/models/ServerManager'
 import UserManager from '@/models/UserManager'
+import MessageManager from '@/models/MessageManager'
 
 require('dotenv').config({ path: '../.env' })
 
@@ -16,6 +17,8 @@ const app = express()
 const wsServer = new WebSocketServer({ server: app })
 const server = new ServerManager(wsServer)
 const userManager = new UserManager()
+const messageManager = new MessageManager()
 
 global.server = server
 global.userManager = userManager
+global.messageManager = messageManager

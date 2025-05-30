@@ -37,9 +37,11 @@ import UserPanelSettingsModal from './components/Modals/UserSettingsModal.vue'
 import { useBreakpoints, useWebSocket } from '@vueuse/core'
 import { breakpointsConfig } from './helpers/utils'
 import type { EditableUserProfile } from '~/types/user'
-import type { ActiveUserResponse, MessageResponse, Response, UsersResponse } from '~/types/responses'
+import type { ActiveUserResponse, MessageListResponse, MessageResponse, Response, UsersResponse } from '~/types/responses'
 import User from './models/User'
-import type { Message } from './types/message'
+import Message from './models/Message'
+import { maxMessageCount } from '~/helpers/message'
+import { defaultUserProfile } from './helpers/user'
 
 const websocketURL = import.meta.env.PROD
   ? `wss://${window.location.host}`
@@ -72,6 +74,8 @@ const { send } = useWebSocket(websocketURL, {
     switch (response.type) {
       case 'message':
         return onMessage(response.data)
+      case 'messages':
+        return onMessages(response.data)
       case 'users':
         return onUsers(response.data)
       case 'activeUser':
@@ -84,13 +88,7 @@ const { send } = useWebSocket(websocketURL, {
 
 const users = ref<User[]>([])
 const messages = ref<Message[]>([])
-const activeUser = ref<User>(new User({
-  id: '',
-  username: 'Anonymous',
-  status: 'unknown',
-  colour: 'orange',
-  image: 'cat'
-}))
+const activeUser = ref<User>(new User(defaultUserProfile))
 const showUsersPanel = ref(false);
 const showUserSettings = ref(false)
 const showInfoModal = ref(false);
@@ -112,12 +110,8 @@ const sendUserProfileData = (data: EditableUserProfile) => {
 
 // Response handlers
 const onMessage = async (data: MessageResponse['data']) => {
-  const maxMessages = 30
-  const message: Message = {
-    ...data,
-    user: new User(data.user)
-  }
-  if (messages.value.length < maxMessages) {
+  const message = new Message(data)
+  if (messages.value.length < maxMessageCount) {
     messages.value.push(message)
   } else {
     messages.value.shift()
@@ -129,8 +123,12 @@ const onMessage = async (data: MessageResponse['data']) => {
   })
 }
 
+const onMessages = (data: MessageListResponse['data']) => {
+  messages.value = data.map(message => new Message(message));
+}
+
 const onUsers = (data: UsersResponse['data']) => {
-  users.value = [...data.users.map(user => new User(user))]
+  users.value = [...data.map(user => new User(user))]
 }
 
 const onActiveUser = (data: ActiveUserResponse['data']) => {

@@ -17,13 +17,9 @@ class UserManager {
     server.broadcast(usersResponse)
   }
 
-  broadcastActiveUserProfile = (client: WebSocket, userId: string) => {
-    const user = this.getUser(userId)
-
-    if (!user) return
-
+  broadcastActiveUserProfile = (user: User) => {
     const response = createActiveUserResponse(user)
-    server.broadcastTo(client, response)
+    server.broadcastTo(user.client, response)
   }
 
   addUser = (client: WebSocket): User => {

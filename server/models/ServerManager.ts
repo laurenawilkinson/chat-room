@@ -19,10 +19,13 @@ class ServerManager {
     const user = userManager.addUser(socket)
 
     // Broadcast user profile to the active user
-    userManager.broadcastActiveUserProfile(socket, user.id)
+    userManager.broadcastActiveUserProfile(user)
 
     // Broadcast the new user to all
     userManager.broadcastUsers()
+
+    // Broadcast the current messages to the new user
+    messageManager.broadcastMessages(user)
 
     // Received message from user
     socket.on('message', (req: Buffer) => {
@@ -39,19 +42,19 @@ class ServerManager {
             })
             break
           case 'message':
-            const res = createMessageResponse(
-              user.toJSON(),
+            const message = messageManager.addMessage(
+              user,
               request.data.message
             )
-            this.broadcast(res)
+            messageManager.broadcastMessage(message)
             break
           case 'profile':
             const updatedUser = userManager.updateUserProfile(
               user.id,
               request.data
             )
-            this.broadcastTo(user.client, createActiveUserResponse(updatedUser))
-            this.broadcast(createUsersListResponse(userManager.users))
+            userManager.broadcastActiveUserProfile(updatedUser)
+            userManager.broadcastUsers()
         }
       } catch (e) {
         console.error('Error parsing request', e)

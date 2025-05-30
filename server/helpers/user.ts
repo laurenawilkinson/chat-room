@@ -8,7 +8,7 @@ import { userColours, userImages } from '~/helpers/user'
 export const createUsersListResponse = (users: UserStore): UsersResponse => {
   const usersList = Object.keys(users).map((id) => users[id].toJSON())
 
-  return { type: 'users', data: { users: usersList } }
+  return { type: 'users', data: usersList }
 }
 
 export const createActiveUserResponse = (user: User): ActiveUserResponse => {
