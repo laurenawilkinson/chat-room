@@ -68,7 +68,7 @@ withDefaults(defineProps<ButtonProps>(), {
   }
 
   &.grey {
-    --button-theme: #4e4e4e;
+    --button-theme: var(--grey-80);
   }
 
   /* Variants */

@@ -7,6 +7,7 @@ body {
   font-optical-sizing: auto;
   font-weight: var(--font-weight-regular);
   font-style: normal;
+  color: var(--text-colour);
 
   ::selection {
     background-color: rgba(#bababa, 0.2);
@@ -30,9 +31,10 @@ textarea {
   transition: border-color 0.2s ease-out;
   outline: none;
   width: 100%;
+  color: inherit;
 
   &::placeholder {
-    color: #c0c0c0;
+    color: var(--grey-40);
   }
 
   &:focus {

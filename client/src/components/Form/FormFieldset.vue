@@ -21,7 +21,7 @@ fieldset {
 legend {
   font-size: 1rem;
   font-weight: var(--font-weight-semibold);
-  color: #686868;
+  color: var(--grey-65);
   margin-bottom: .75rem;
 }
 

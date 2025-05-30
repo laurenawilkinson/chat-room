@@ -33,7 +33,7 @@ const statusLabel = computed(() => statusLabels[props.status] || 'Unknown')
   align-items: center;
   gap: 0.35rem;
   font-size: var(--12px);
-  color: #5a5a5a;
+  color: var(--grey-70);
 
   &.online {
     --status-colour: var(--green);
@@ -44,7 +44,7 @@ const statusLabel = computed(() => statusLabels[props.status] || 'Unknown')
   }
 
   svg {
-    fill: var(--status-colour, #bfbfbf);
+    fill: var(--status-colour, var(--grey-40));
     width: 10px;
     height: 10px;
   }

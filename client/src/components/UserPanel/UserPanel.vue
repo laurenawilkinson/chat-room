@@ -118,7 +118,7 @@ header {
     font-weight: var(--font-weight-semibold);
 
     span {
-      opacity: .6;
+      color: var(--grey-65);
     }
   }
 }

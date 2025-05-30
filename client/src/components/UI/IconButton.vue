@@ -71,7 +71,7 @@ withDefaults(defineProps<IconButtonProps>(), {
   }
 
   &.grey {
-    --icon-button-theme: #c0c0c0;
+    --icon-button-theme: var(--grey-40);
   }
 
   /* Sizes */

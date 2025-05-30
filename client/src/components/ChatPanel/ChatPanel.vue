@@ -1,6 +1,9 @@
 <template>
   <section class="panel">
     <div class="message-list" ref="messageList">
+      <p v-if="!isLoading && messages.length === 0" class="message-list-no-data">
+        No messages to display. Why not start the conversation?
+      </p>
       <TransitionGroup name="slide-up" tag="ul">
         <li v-for="(item, index) in messages" :key="index">
           <ChatPanelMessage :user="item.user" :message="item.message" :date="item.date" />
@@ -25,11 +28,12 @@ import { computed, ref } from 'vue'
 import IconButton from '@/components/UI/IconButton.vue'
 import ChatPanelMessage from '@/components/ChatPanel/ChatPanelMessage.vue'
 import ChatPanelEmojiPicker from './ChatPanelEmojiPicker.vue'
-import type { Message } from '@/types/message'
+import Message from '@/models/Message'
 import { censorProfanity } from '@/helpers/utils'
 
 interface ChatPanelProps {
   messages: Message[]
+  isLoading: boolean;
 }
 
 defineProps<ChatPanelProps>()
@@ -84,6 +88,13 @@ defineExpose({ scrollToNewestMessage })
   display: flex;
   flex-direction: column-reverse;
   @include rounded-scrollbar;
+
+  &-no-data {
+    color: var(--grey-50);
+    text-align: center;
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 1.5rem;
+  }
 }
 
 ul {

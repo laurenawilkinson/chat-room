@@ -18,7 +18,7 @@
             @open:settings="showUserSettings = true" @close="showUsersPanel = false" />
         </Transition>
       </template>
-      <ChatPanel ref="chatPanel" :messages="messages" @send:message="sendMessage" />
+      <ChatPanel ref="chatPanel" :messages="messages" :isLoading="isLoading.messages" @send:message="sendMessage" />
     </div>
   </main>
   <SiteInfoModal :show="showInfoModal" @close="showInfoModal = false" />
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, reactive } from 'vue'
 import UserPanel from '@/components/UserPanel/UserPanel.vue'
 import ChatPanel from '@/components/ChatPanel/ChatPanel.vue'
 import { IconInfoCircle, IconMenu } from '@tabler/icons-vue'
@@ -89,6 +89,10 @@ const { send } = useWebSocket(websocketURL, {
 const users = ref<User[]>([])
 const messages = ref<Message[]>([])
 const activeUser = ref<User>(new User(defaultUserProfile))
+const isLoading = reactive({
+  users: true,
+  messages: true,
+})
 const showUsersPanel = ref(false);
 const showUserSettings = ref(false)
 const showInfoModal = ref(false);
@@ -124,10 +128,12 @@ const onMessage = async (data: MessageResponse['data']) => {
 }
 
 const onMessages = (data: MessageListResponse['data']) => {
+  isLoading.messages = false;
   messages.value = data.map(message => new Message(message));
 }
 
 const onUsers = (data: UsersResponse['data']) => {
+  isLoading.users = false
   users.value = [...data.map(user => new User(user))]
 }
 
