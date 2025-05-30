@@ -19,7 +19,7 @@ export const userImages: UserImage[] = [
 
 export const userColours: Record<string, string> = {
   red: '#EF4444',
-  pink: '#EC4899',
+  pink: '#ff82c4',
   orange: '#F59E42',
   yellow: '#FACC15',
   green: '#22C55E',
