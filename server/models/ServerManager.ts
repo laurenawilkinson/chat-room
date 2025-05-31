@@ -47,6 +47,8 @@ class ServerManager {
               request.data.message
             )
             messageManager.broadcastMessage(message)
+            userManager.removeTypingUser(user.id)
+            userManager.broadcastTypingUsers()
             break
           case 'profile':
             const updatedUser = userManager.updateUserProfile(
@@ -55,6 +57,13 @@ class ServerManager {
             )
             userManager.broadcastActiveUserProfile(updatedUser)
             userManager.broadcastUsers()
+            break
+          case 'typing':
+            request.data.typing
+              ? userManager.addTypingUser(user.id)
+              : userManager.removeTypingUser(user.id)
+            userManager.broadcastTypingUsers()
+            break
         }
       } catch (e) {
         console.error('Error parsing request', e)
@@ -64,7 +73,9 @@ class ServerManager {
     // User disconnected
     socket.on('close', () => {
       userManager.removeUser(user.id)
+      userManager.removeTypingUser(user.id)
       userManager.broadcastUsers()
+      userManager.broadcastTypingUsers()
     })
   }
 

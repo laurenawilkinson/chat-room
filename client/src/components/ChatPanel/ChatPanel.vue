@@ -1,17 +1,26 @@
 <template>
   <section class="panel">
-    <div class="message-list" ref="messageList">
-      <p v-if="!isLoading && messages.length === 0" class="message-list-no-data">
+    <div class="chat-panel-messages">
+      <div class="message-list" ref="messageList">
+        <TransitionGroup name="slide-up" tag="ul">
+          <li v-for="(item, index) in messages" :key="index">
+            <ChatPanelMessage :user="item.user" :message="item.message" :date="item.date" />
+          </li>
+        </TransitionGroup>
+      </div>
+      <p v-if="!isLoading && messages.length === 0" class="chat-panel-no-data">
         No messages to display. Why not start the conversation?
       </p>
-      <TransitionGroup name="slide-up" tag="ul">
-        <li v-for="(item, index) in messages" :key="index">
-          <ChatPanelMessage :user="item.user" :message="item.message" :date="item.date" />
-        </li>
-      </TransitionGroup>
+      <Transition name="pop-up">
+        <small v-if="typingUsers.length > 0" class="chat-panel-typing-indicator">
+          <strong v-if="typingUsers.length > 1">{{ typingUsers.length }} users typing</strong>
+          <template v-else><strong>{{ typingUsers[0].username }}</strong> is typing</template>
+        </small>
+      </Transition>
     </div>
     <form @submit.prevent="sendMessage">
-      <input v-model.trim="message" placeholder="Type a message" :maxlength="maxMessageLength" />
+      <input v-model.trim="message" placeholder="Type a message" :maxlength="maxMessageLength"
+        @input="sendTypingIndicator" @blur="sendStopTypingIndicator" />
       <aside>
         <ChatPanelEmojiPicker @select="appendEmojiToMessage" />
         <IconButton type="submit" theme="primary" :disabled="!canSendMessage">
@@ -30,14 +39,16 @@ import ChatPanelMessage from '@/components/ChatPanel/ChatPanelMessage.vue'
 import ChatPanelEmojiPicker from './ChatPanelEmojiPicker.vue'
 import Message from '@/models/Message'
 import { censorProfanity } from '@/helpers/utils'
+import type User from '@/models/User'
 
 interface ChatPanelProps {
   messages: Message[]
   isLoading: boolean;
+  typingUsers: User[];
 }
 
 defineProps<ChatPanelProps>()
-const emit = defineEmits(['send:message'])
+const emit = defineEmits(['send:message', 'send:typing', 'send:stopTyping'])
 
 const message = ref('')
 const maxMessageLength = 250
@@ -51,6 +62,15 @@ const sendMessage = () => {
 
   emit('send:message', censorProfanity(message.value))
   message.value = ''
+}
+
+const sendTypingIndicator = () => {
+  if (message.value.length === 0) return sendStopTypingIndicator();
+  emit('send:typing')
+}
+
+const sendStopTypingIndicator = () => {
+  emit('send:stopTyping')
 }
 
 const appendEmojiToMessage = (emoji: string) => {
@@ -88,12 +108,59 @@ defineExpose({ scrollToNewestMessage })
   display: flex;
   flex-direction: column-reverse;
   @include rounded-scrollbar;
+}
 
+.chat-panel {
   &-no-data {
     color: var(--grey-50);
     text-align: center;
     font-weight: var(--font-weight-medium);
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    line-height: 1.4;
+  }
+
+  &-messages {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  &-typing-indicator {
+    position: absolute;
+    left: .75rem;
+    bottom: .5rem;
+    font-size: var(--12px);
+    font-weight: var(--font-weight-medium);
+    color: var(--grey-55);
+
+    &::after {
+      content: '';
+      animation: typing 1s infinite;
+
+      @keyframes typing {
+        0% {
+          content: ''
+        }
+
+        25% {
+          content: '.'
+        }
+
+        50% {
+          content: '..'
+        }
+
+        75% {
+          content: '...'
+        }
+      }
+    }
+
+    strong {
+      font-weight: var(--font-weight-bold);
+    }
   }
 }
 

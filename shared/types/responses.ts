@@ -7,6 +7,7 @@ export type Response =
   | MessageListResponse
   | UsersResponse
   | ActiveUserResponse
+  | TypingUsersResponse
 
 interface BaseResponse {
   type: string
@@ -42,4 +43,9 @@ export interface UsersResponse extends BaseResponse {
 export interface ActiveUserResponse extends BaseResponse {
   type: 'activeUser'
   data: UserProfile
+}
+
+export interface TypingUsersResponse extends BaseResponse {
+  type: 'typingUsers'
+  data: string[]
 }

@@ -18,7 +18,8 @@
             @open:settings="showUserSettings = true" @close="showUsersPanel = false" />
         </Transition>
       </template>
-      <ChatPanel ref="chatPanel" :messages="messages" :isLoading="isLoading.messages" @send:message="sendMessage" />
+      <ChatPanel ref="chatPanel" :messages="messages" :isLoading="isLoading.messages" :typingUsers="typingUsers"
+        @send:message="sendMessage" @send:typing="sendTypingIndicator" @send:stopTyping="sendStopTypingIndicator" />
     </div>
   </main>
   <SiteInfoModal :show="showInfoModal" @close="showInfoModal = false" />
@@ -27,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, nextTick, reactive } from 'vue'
+import { ref, nextTick, reactive, computed } from 'vue'
 import UserPanel from '@/components/UserPanel/UserPanel.vue'
 import ChatPanel from '@/components/ChatPanel/ChatPanel.vue'
 import { IconInfoCircle, IconMenu } from '@tabler/icons-vue'
@@ -37,11 +38,13 @@ import UserSettingsModal from './components/Modals/UserSettingsModal.vue'
 import { useBreakpoints, useWebSocket } from '@vueuse/core'
 import { breakpointsConfig } from './helpers/utils'
 import type { EditableUserProfile } from '~/types/user'
-import type { ActiveUserResponse, MessageListResponse, MessageResponse, Response, UsersResponse } from '~/types/responses'
+import type { Request } from '~/types/requests'
+import type { ActiveUserResponse, MessageListResponse, MessageResponse, Response, TypingUsersResponse, UsersResponse } from '~/types/responses'
 import User from './models/User'
 import Message from './models/Message'
-import { maxMessageCount } from '~/helpers/message'
+import { maxMessageCount, typingIndicatorTimeout } from '~/helpers/message'
 import { defaultUserProfile } from './helpers/user'
+import { debounce, throttle } from 'lodash'
 
 const websocketURL = import.meta.env.PROD
   ? `wss://${window.location.host}`
@@ -80,6 +83,8 @@ const { send } = useWebSocket(websocketURL, {
         return onUsers(response.data)
       case 'activeUser':
         return onActiveUser(response.data)
+      case 'typingUsers':
+        return onTypingUsers(response.data)
       default:
         return
     }
@@ -87,6 +92,7 @@ const { send } = useWebSocket(websocketURL, {
 })
 
 const users = ref<User[]>([])
+const typingUserIds = ref<string[]>([])
 const messages = ref<Message[]>([])
 const activeUser = ref<User>(new User(defaultUserProfile))
 const isLoading = reactive({
@@ -100,7 +106,11 @@ const breakpoints = useBreakpoints(breakpointsConfig)
 const isDesktop = breakpoints.greater('lg')
 const chatPanel = ref<typeof ChatPanel>()
 
-const sendData = (json: object) => send(JSON.stringify(json))
+const typingUsers = computed(() => {
+  return users.value.filter(user => typingUserIds.value.includes(user.id) && user.id !== activeUser.value.id)
+})
+
+const sendData = (json: Request) => send(JSON.stringify(json))
 
 // Send message
 const sendMessage = (message: string) => {
@@ -110,6 +120,26 @@ const sendMessage = (message: string) => {
 const sendUserProfileData = (data: EditableUserProfile) => {
   sendData({ type: 'profile', data })
   showUserSettings.value = false
+}
+
+const sendStopTypingIndicator = () => {
+  if (!typingUserIds.value.includes(activeUser.value.id)) return;
+  sendTypingIndicatorThrottle.cancel()
+  sendData({ type: 'typing', data: { typing: false } })
+}
+
+const sendStopTypingIndicatorDebounce = debounce(() => {
+  sendStopTypingIndicator()
+}, typingIndicatorTimeout)
+
+const sendTypingIndicatorThrottle = throttle(() => {
+  sendData({ type: 'typing', data: { typing: true } })
+}, typingIndicatorTimeout)
+
+
+const sendTypingIndicator = () => {
+  sendTypingIndicatorThrottle()
+  sendStopTypingIndicatorDebounce()
 }
 
 // Response handlers
@@ -135,6 +165,10 @@ const onMessages = (data: MessageListResponse['data']) => {
 const onUsers = (data: UsersResponse['data']) => {
   isLoading.users = false
   users.value = [...data.map(user => new User(user))]
+}
+
+const onTypingUsers = (data: TypingUsersResponse['data']) => {
+  typingUserIds.value = data
 }
 
 const onActiveUser = (data: ActiveUserResponse['data']) => {

@@ -1,6 +1,10 @@
 import type { EditableUserProfile } from './user'
 
-export type Request = HeartbeatRequest | MessageRequest | UserProfileRequest
+export type Request =
+  | HeartbeatRequest
+  | MessageRequest
+  | UserProfileRequest
+  | TypingRequest
 
 interface BaseRequest {
   type: string
@@ -24,4 +28,11 @@ interface MessageRequest extends BaseRequest {
 interface UserProfileRequest extends BaseRequest {
   type: 'profile'
   data: EditableUserProfile
+}
+
+interface TypingRequest extends BaseRequest {
+  type: 'typing'
+  data: {
+    typing: boolean
+  }
 }
