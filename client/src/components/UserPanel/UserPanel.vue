@@ -5,14 +5,14 @@
     </IconButton>
     <header>
       <strong>Users</strong>
-      <small v-if="onlineUsers.length > 0">
-        <StatusIndicator status="online" />
+      <small v-show="onlineUsers.length > 0">
+        <StatusIndicator v-show="onlineUsers.length > 0" status="online" :pulseOn="onlineUsers.length" />
         <span>{{ onlineUsers.length }} online</span>
       </small>
     </header>
     <ul>
       <li v-for="user in orderedUsers" :key="user.id">
-        <StatusIndicator :status="user.status" />
+        <StatusIndicator :status="user.status" :pulseOn="user.status === 'online'" />
         <strong>
           {{ user.username }} <span v-if="user.id === activeUser.id">(You)</span>
         </strong>
@@ -130,6 +130,7 @@ header {
 ul {
   flex: 1;
   overflow-y: auto;
+  margin-inline: -1rem;
   @include rounded-scrollbar;
 }
 
@@ -137,7 +138,7 @@ li {
   display: flex;
   align-items: center;
   gap: var(--10px);
-  padding-block: 1rem;
+  padding: 1rem;
   font-size: var(--14px);
 
   strong {
