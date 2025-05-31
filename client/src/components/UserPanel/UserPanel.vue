@@ -54,7 +54,11 @@ const orderedUsers = computed(() => [...props.users].sort((a, b) => {
     if (status === 'away') return 1
     return 2
   }
-  return getOrder(a.status) - getOrder(b.status)
+  // Order by status
+  const diff = getOrder(a.status) - getOrder(b.status)
+  if (diff !== 0) return diff
+  // Order alphabetically
+  return a.username.toLowerCase().localeCompare(b.username.toLowerCase())
 }))
 
 const closePanel = () => {
