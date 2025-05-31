@@ -3,7 +3,21 @@
     <ProfileImage :image="activeUser.image" @click="$emit('click:settings')" />
     <div>
       <strong>{{ activeUser.username }}</strong>
-      <StatusIndicator :status="activeUser.status" showLabel />
+      <ContextMenu>
+        <template #toggle="{ toggleMenu }">
+          <Button theme="grey" variant="ghost" size="xs" @click="toggleMenu">
+            <StatusIndicator :status="activeUser.status" showLabel />
+          </Button>
+        </template>
+        <template #default="{ closeMenu }">
+          <ContextMenuItem @select="sendStatus('online', closeMenu)">
+            <StatusIndicator status="online" showLabel />
+          </ContextMenuItem>
+          <ContextMenuItem @select="sendStatus('away', closeMenu)">
+            <StatusIndicator status="away" showLabel />
+          </ContextMenuItem>
+        </template>
+      </ContextMenu>
     </div>
     <IconButton @click="$emit('click:settings')">
       <IconSettings />
@@ -18,13 +32,22 @@ import IconButton from '../UI/IconButton.vue';
 import ProfileImage from '../UI/ProfileImage.vue';
 import type User from '@/models/User';
 import { userColours } from '~/helpers/user';
+import ContextMenu from '../ContextMenu/ContextMenu.vue';
+import ContextMenuItem from '../ContextMenu/ContextMenuItem.vue';
+import Button from '../UI/Button.vue';
+import type { UserStatus } from '~/types/user';
 
 interface UserPanelProfileProps {
   activeUser: User
 }
 
 defineProps<UserPanelProfileProps>()
-defineEmits(['click:settings'])
+const emit = defineEmits(['click:settings', 'send:status'])
+
+const sendStatus = (status: UserStatus, closeMenu: () => void) => {
+  emit('send:status', status)
+  closeMenu()
+}
 </script>
 
 <style lang="scss" scoped>
@@ -42,6 +65,14 @@ defineEmits(['click:settings'])
     flex: 1;
     min-width: 0;
   }
+}
+
+.context-menu {
+  margin-left: -.5rem;
+}
+
+.context-menu-items .status-indicator {
+  font-size: var(--14px);
 }
 
 strong {

@@ -10,12 +10,13 @@
     </header>
     <div class="container">
       <template v-if="isDesktop">
-        <UserPanel :users="users" :activeUser="activeUser" @open:settings="showUserSettings = true" />
+        <UserPanel :users="users" :activeUser="activeUser" @open:settings="showUserSettings = true"
+          @send:status="sendUserStatus" />
       </template>
       <template v-else>
         <Transition name="slide-left" mode="out-in">
           <UserPanel v-if="showUsersPanel" :users="users" :activeUser="activeUser"
-            @open:settings="showUserSettings = true" @close="showUsersPanel = false" />
+            @open:settings="showUserSettings = true" @send:status="sendUserStatus" @close="showUsersPanel = false" />
         </Transition>
       </template>
       <ChatPanel ref="chatPanel" :messages="messages" :isLoading="isLoading.messages" :typingUsers="typingUsers"
@@ -37,7 +38,7 @@ import SiteInfoModal from './components/Modals/SiteInfoModal.vue'
 import UserSettingsModal from './components/Modals/UserSettingsModal.vue'
 import { useBreakpoints, useWebSocket } from '@vueuse/core'
 import { breakpointsConfig } from './helpers/utils'
-import type { EditableUserProfile } from '~/types/user'
+import type { EditableUserProfile, UserStatus } from '~/types/user'
 import type { Request } from '~/types/requests'
 import type { ActiveUserResponse, MessageListResponse, MessageResponse, Response, TypingUsersResponse, UsersResponse } from '~/types/responses'
 import User from './models/User'
@@ -120,6 +121,10 @@ const sendMessage = (message: string) => {
 const sendUserProfileData = (data: EditableUserProfile) => {
   sendData({ type: 'profile', data })
   showUserSettings.value = false
+}
+
+const sendUserStatus = (status: UserStatus) => {
+  sendData({ type: 'status', data: { status } })
 }
 
 const sendStopTypingIndicator = () => {

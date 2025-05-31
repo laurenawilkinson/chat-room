@@ -33,7 +33,7 @@ class ServerManager {
         const request: Request = JSON.parse(req.toString())
 
         switch (request.type) {
-          case 'heartbeat':
+          case 'heartbeat': {
             this.broadcastTo(user.client, {
               type: 'heartbeat',
               data: {
@@ -41,7 +41,8 @@ class ServerManager {
               },
             })
             break
-          case 'message':
+          }
+          case 'message': {
             const message = messageManager.addMessage(
               user,
               request.data.message
@@ -50,7 +51,8 @@ class ServerManager {
             userManager.removeTypingUser(user.id)
             userManager.broadcastTypingUsers()
             break
-          case 'profile':
+          }
+          case 'profile': {
             const updatedUser = userManager.updateUserProfile(
               user.id,
               request.data
@@ -58,12 +60,23 @@ class ServerManager {
             userManager.broadcastActiveUserProfile(updatedUser)
             userManager.broadcastUsers()
             break
-          case 'typing':
+          }
+          case 'typing': {
             request.data.typing
               ? userManager.addTypingUser(user.id)
               : userManager.removeTypingUser(user.id)
             userManager.broadcastTypingUsers()
             break
+          }
+          case 'status': {
+            const updatedUser = userManager.updateUserStatus(
+              user.id,
+              request.data.status
+            )
+            userManager.broadcastUsers()
+            userManager.broadcastActiveUserProfile(updatedUser)
+            break
+          }
         }
       } catch (e) {
         console.error('Error parsing request', e)

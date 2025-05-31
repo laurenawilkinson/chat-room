@@ -18,7 +18,7 @@
         </strong>
       </li>
     </ul>
-    <UserPanelProfile :activeUser="activeUser" @click:settings="$emit('open:settings')" />
+    <UserPanelProfile :activeUser="activeUser" @click:settings="$emit('open:settings')" @send:status="sendStatus" />
   </aside>
 </template>
 
@@ -38,7 +38,7 @@ interface UserPanelProps {
 }
 
 const props = defineProps<UserPanelProps>()
-const emit = defineEmits(['close', 'open:settings'])
+const emit = defineEmits(['close', 'open:settings', 'send:status'])
 
 const panel = ref(null)
 
@@ -59,6 +59,10 @@ const orderedUsers = computed(() => [...props.users].sort((a, b) => {
 
 const closePanel = () => {
   emit('close')
+}
+
+const sendStatus = (status: UserStatus) => {
+  emit('send:status', status)
 }
 </script>
 

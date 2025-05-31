@@ -6,7 +6,7 @@ import {
 import { UserStore } from '@/types/user'
 import User from './User'
 import { WebSocket } from 'ws'
-import { EditableUserProfile } from '~/types/user'
+import { EditableUserProfile, UserStatus } from '~/types/user'
 
 class UserManager {
   public users: UserStore = {}
@@ -45,6 +45,11 @@ class UserManager {
 
   updateUserProfile = (userId: string, data: EditableUserProfile): User => {
     this.users[userId].setProfileData(data)
+    return this.users[userId]
+  }
+
+  updateUserStatus = (userId: string, status: UserStatus): User => {
+    this.users[userId].status = status
     return this.users[userId]
   }
 

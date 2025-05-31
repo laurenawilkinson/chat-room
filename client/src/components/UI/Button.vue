@@ -1,5 +1,5 @@
 <template>
-  <button :class="`button ${theme} ${variant}`" :type="type" :disabled="disabled">
+  <button :class="`button ${theme} ${variant} ${size}`" :type="type" :disabled="disabled">
     <span>
       <slot />
     </span>
@@ -12,13 +12,15 @@ interface ButtonProps {
   disabled?: boolean
   theme?: 'primary' | 'grey'
   variant?: 'solid' | 'outline' | 'ghost'
+  size?: 'xs' | 'sm' | 'md'
 }
 
 withDefaults(defineProps<ButtonProps>(), {
   type: 'button',
   disabled: false,
   theme: 'primary',
-  variant: 'solid'
+  variant: 'solid',
+  size: 'md'
 })
 </script>
 
@@ -38,7 +40,6 @@ withDefaults(defineProps<ButtonProps>(), {
   transition-property: background-color, color;
   position: relative;
   border-radius: .75rem;
-  min-width: 90px;
 
   &:not(:disabled):hover {
     cursor: pointer;
@@ -111,6 +112,25 @@ withDefaults(defineProps<ButtonProps>(), {
         transform: scale(1);
       }
     }
+  }
+
+  /* Sizes */
+  &.xs {
+    padding: .15rem .5rem;
+    font-size: var(--12px);
+    min-width: 55px;
+  }
+
+  &.sm {
+    padding: .25rem .75rem;
+    font-size: var(--14px);
+    min-width: 70px;
+  }
+
+  &.md {
+    padding: .65rem 1.25rem;
+    font-size: 1rem;
+    min-width: 90px;
   }
 
   > span {
