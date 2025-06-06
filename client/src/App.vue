@@ -44,12 +44,13 @@ import type { ActiveUserResponse, MessageListResponse, MessageResponse, Response
 import User from './models/User'
 import Message from './models/Message'
 import { maxMessageCount, typingIndicatorTimeout } from '~/helpers/message'
-import { defaultUserProfile } from './helpers/user'
+import { defaultUserProfile, getLocalUser, storeLocalUser } from './helpers/user'
 import { debounce, throttle } from 'lodash'
 
 const websocketURL = import.meta.env.PROD
   ? `wss://${window.location.host}`
   : `ws://localhost:${import.meta.env.VITE_WS_PORT}`
+const localUser = getLocalUser()
 
 const { send } = useWebSocket(websocketURL, {
   heartbeat: {
@@ -62,7 +63,8 @@ const { send } = useWebSocket(websocketURL, {
     interval: 1000 * 30,
   },
   onConnected: () => {
-    console.log('WebSocket connection is open...')
+    console.log('WebSocket connection is open')
+    if (localUser) sendUserProfileData(localUser)
   },
   onDisconnected: () => {
     console.error('WebSocket has disconnected')
@@ -95,7 +97,7 @@ const { send } = useWebSocket(websocketURL, {
 const users = ref<User[]>([])
 const typingUserIds = ref<string[]>([])
 const messages = ref<Message[]>([])
-const activeUser = ref<User>(new User(defaultUserProfile))
+const activeUser = ref<User>(new User({ ...defaultUserProfile, ...localUser }))
 const isLoading = reactive({
   users: true,
   messages: true,
@@ -178,6 +180,7 @@ const onTypingUsers = (data: TypingUsersResponse['data']) => {
 
 const onActiveUser = (data: ActiveUserResponse['data']) => {
   activeUser.value = new User(data)
+  storeLocalUser({ username: data.username, image: data.image, colour: data.colour })
 }
 
 const onUserDisconnect = () => {

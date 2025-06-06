@@ -125,6 +125,7 @@ defineExpose({ scrollToNewestMessage })
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    overflow: hidden;
   }
 
   &-typing-indicator {
