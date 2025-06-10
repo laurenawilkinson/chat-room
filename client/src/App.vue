@@ -49,7 +49,7 @@ import { debounce, throttle } from 'lodash'
 
 const websocketURL = import.meta.env.PROD
   ? `wss://${window.location.host}`
-  : `ws://localhost:${import.meta.env.VITE_WS_PORT}`
+  : `ws://localhost:${import.meta.env.VITE_SERVER_PORT}`
 const localUser = getLocalUser()
 
 const { send } = useWebSocket(websocketURL, {
