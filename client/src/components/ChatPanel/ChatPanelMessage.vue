@@ -68,5 +68,11 @@ const dateString = computed(() => {
   img {
     grid-column: 2;
   }
+
+  img {
+    max-height: 200px;
+    max-width: 100%;
+    display: block;
+  }
 }
 </style>

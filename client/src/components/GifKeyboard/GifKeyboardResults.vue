@@ -26,13 +26,7 @@ interface GifKeyboardResultsProps {
 defineProps<GifKeyboardResultsProps>()
 
 const getUrl = (result: GifResult) => {
-  if (result.media_formats.tinygif) {
-    return result.media_formats.tinygif.url;
-  }
-  if (result.media_formats.gif) {
-    return result.media_formats.gif.url;
-  }
-  return ''
+  return result.media_formats.gif?.url || ''
 }
 </script>
 

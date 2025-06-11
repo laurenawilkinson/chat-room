@@ -37,7 +37,7 @@ const searchPayload = computed(() => ({
   params: {
     q: searchTerm.value,
     locale: navigator.language,
-    media_filter: 'gif,tinygif'
+    media_filter: 'gif'
   },
 }))
 const searchResults = useFetch('/api/tenor', { immediate: false })
