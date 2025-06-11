@@ -4,7 +4,7 @@
       <IconMoodSmileBeam />
     </IconButton>
     <Transition name="fade">
-      <EmojiPicker v-if="showPicker" native @keydown.enter.prevent @select="onSelectEmoji" />
+      <EmojiPicker v-if="showPicker" native @keydown.enter.stop @select="onSelectEmoji" />
     </Transition>
   </div>
 </template>

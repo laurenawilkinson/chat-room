@@ -11,6 +11,10 @@ class Message {
     this.message = message.message
     this.date = message.date
   }
+
+  public get isGif(): boolean {
+    return /^https:\/\/media\.tenor\.com\/.*\.gif$/.test(this.message)
+  }
 }
 
 export default Message

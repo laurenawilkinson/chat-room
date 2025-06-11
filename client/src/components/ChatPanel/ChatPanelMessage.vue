@@ -5,7 +5,8 @@
       <strong>{{ user.username }}</strong>
       <small>{{ dateString }}</small>
     </div>
-    <p>{{ message }}</p>
+    <img v-if="isGif" :src="message" alt="Animated GIF" />
+    <p v-else>{{ message }}</p>
   </div>
 </template>
 
@@ -20,6 +21,7 @@ interface ChatPanelMessageProps {
   user: User
   message: string
   date: string
+  isGif: boolean
 }
 
 const props = defineProps<ChatPanelMessageProps>()
@@ -62,7 +64,8 @@ const dateString = computed(() => {
     font-size: var(--10px);
   }
 
-  p {
+  p,
+  img {
     grid-column: 2;
   }
 }

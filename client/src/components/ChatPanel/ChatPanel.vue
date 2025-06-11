@@ -4,7 +4,7 @@
       <div class="message-list" ref="messageList">
         <TransitionGroup name="slide-up" tag="ul">
           <li v-for="(item, index) in messages" :key="index">
-            <ChatPanelMessage :user="item.user" :message="item.message" :date="item.date" />
+            <ChatPanelMessage :user="item.user" :message="item.message" :date="item.date" :isGif="item.isGif" />
           </li>
         </TransitionGroup>
       </div>
@@ -20,10 +20,11 @@
     </div>
     <form @submit.prevent="sendMessage">
       <input v-model.trim="message" placeholder="Type a message" :maxlength="maxMessageLength"
-        @input="sendTypingIndicator" @blur="sendStopTypingIndicator" />
+        @input="sendTypingIndicator" @blur="sendStopTypingIndicator" @keydown.enter="sendMessage" />
       <aside>
+        <ChatPanelGifKeyboard @select="sendGifMessage" />
         <ChatPanelEmojiPicker @select="appendEmojiToMessage" />
-        <IconButton type="submit" theme="primary" :disabled="!canSendMessage">
+        <IconButton theme="primary" :disabled="!canSendMessage" @click="sendMessage">
           <IconMessageForward />
         </IconButton>
       </aside>
@@ -40,6 +41,7 @@ import ChatPanelEmojiPicker from './ChatPanelEmojiPicker.vue'
 import Message from '@/models/Message'
 import { censorProfanity } from '@/helpers/utils'
 import type User from '@/models/User'
+import ChatPanelGifKeyboard from './ChatPanelGifKeyboard.vue'
 
 interface ChatPanelProps {
   messages: Message[]
@@ -62,6 +64,10 @@ const sendMessage = () => {
 
   emit('send:message', censorProfanity(message.value))
   message.value = ''
+}
+
+const sendGifMessage = (url: string) => {
+  emit('send:message', url)
 }
 
 const sendTypingIndicator = () => {
@@ -173,18 +179,21 @@ ul {
 }
 
 form {
-  $aside-width: 30px; // Icon button width
+  $icon-button-width: 30px;
+  $icon-button-count: 3;
+  $aside-gap: var(--10px);
+  $aside-width: calc(#{$icon-button-width} * #{$icon-button-count} + #{$aside-gap} * (#{$icon-button-count} - 1));
   display: flex;
   position: relative;
 
   input {
-    padding-right: calc(var(--20px) + #{$aside-width} + 0.5rem);
+    padding-right: calc(var(--20px) + #{$aside-width} + 0.75rem);
   }
 
   aside {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: $aside-gap;
     position: absolute;
     top: 0;
     right: var(--18px);

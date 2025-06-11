@@ -1,4 +1,4 @@
-@mixin rounded-scrollbar($color: #eee, $background-color: white, $border-width: 3px) {
+@mixin rounded-scrollbar($color: var(--grey-30), $background-color: white, $border-width: 3px) {
   scrollbar-color: $color;
 
   &::-webkit-scrollbar {
@@ -13,5 +13,12 @@
     background-color: $color;
     border: $border-width solid $background-color;
     border-radius: 10px;
+  }
+}
+
+@mixin button-focus($color: black) {
+  &:focus-visible {
+    outline: 2px solid $color;
+    outline-offset: 2px;
   }
 }

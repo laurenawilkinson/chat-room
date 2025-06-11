@@ -23,6 +23,7 @@ const post: RequestHandler = async (req, res) => {
       ...endpoint.searchParams,
       ...params,
       key: apiKey,
+      contentfilter: 'medium',
     })
     endpoint.search = searchParams.toString()
 
