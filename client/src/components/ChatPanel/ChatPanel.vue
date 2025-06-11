@@ -1,5 +1,5 @@
 <template>
-  <section class="panel">
+  <section class="panel chat-panel">
     <div class="chat-panel-messages">
       <div class="message-list" ref="messageList">
         <TransitionGroup name="slide-up" tag="ul">

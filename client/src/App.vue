@@ -199,6 +199,7 @@ const onUserDisconnect = () => {
 
 <style lang="scss" scoped>
 @import '@/styles/mixins/breakpoints';
+$header-height: 65px;
 
 main {
   display: flex;
@@ -221,6 +222,7 @@ header {
   padding: 1rem;
   background-color: white;
   width: 100%;
+  height: $header-height;
   border-bottom: 1px solid #eee;
 
   @include min-breakpoint($mobile-bp) {
@@ -241,6 +243,12 @@ header {
   width: 100%;
   height: 100%;
   max-width: 1350px;
+
+  @include max-breakpoint($mobile-bp) {
+    .chat-panel {
+      max-height: calc(100vh - #{$header-height});
+    }
+  }
 
   @include min-breakpoint($mobile-bp) {
     grid-template-columns: 345px 1fr;
