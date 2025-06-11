@@ -1,13 +1,17 @@
 <template>
-  <ul v-if="isLoading">
-    <li v-for="(_, index) in Array(6)" :key="index"></li>
-  </ul>
-  <ul v-else>
-    <li v-for="category in categories" :key="category.searchterm">
-      <button :style="{ backgroundImage: `url(${category.image})` }" @click="$emit('select', category.searchterm)">
-        <span>{{ category.name }}</span>
-      </button>
-    </li>
+  <ul>
+    <template v-if="isLoading">
+      <li v-for="(_, index) in Array(6)" :key="index"></li>
+    </template>
+    <TransitionGroup name="fade">
+      <template v-if="!isLoading">
+        <li v-for="category in categories" :key="category.searchterm">
+          <button :style="{ backgroundImage: `url(${category.image})` }" @click="$emit('select', category.searchterm)">
+            <span>{{ category.name }}</span>
+          </button>
+        </li>
+      </template>
+    </TransitionGroup>
   </ul>
 </template>
 
@@ -30,14 +34,7 @@ ul {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: .5rem;
-  overflow-y: auto;
-  height: 100%;
-  padding: 1rem;
-  @include rounded-scrollbar;
-
-  &:has(li:empty) {
-    overflow: hidden;
-  }
+  width: 100%;
 }
 
 li {
@@ -45,6 +42,7 @@ li {
   aspect-ratio: 2 / 1.25;
   background-color: var(--grey-10);
   border-radius: 1rem;
+  overflow: hidden;
 }
 
 button {

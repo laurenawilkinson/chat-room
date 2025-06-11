@@ -40,4 +40,14 @@ textarea {
   &:focus {
     border-color: var(--primary-colour);
   }
+
+  &.md {
+    padding: var(--14px) var(--16px);
+    font-size: var(--14px);
+  }
+
+  &.sm {
+    padding: var(--10px) var(--12px);
+    font-size: var(--14px);
+  }
 }

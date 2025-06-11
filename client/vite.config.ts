@@ -22,7 +22,8 @@ export default defineConfig(({ mode }) => {
           target: `http://localhost:${env.VITE_SERVER_PORT}`,
           changeOrigin: true
         }
-      }
+      },
+      open: true
     }
   }
 })

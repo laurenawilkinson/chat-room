@@ -4,21 +4,22 @@
       <IconGif />
     </IconButton>
     <Transition name="fade">
-      <GifKeyboard v-if="showKeyboard" v-model:searchTerm="searchTerm" :categories="categoriesData"
+      <GifKeyboard v-if="showKeyboard" :searchTerm="searchTerm" :categories="categoriesData"
         :loadingCategories="categories.isFetching.value" :results="searchResultsData"
-        :loadingResults="searchResults.isFetching.value" @select:gif="onSelectGif"
-        @select:category="onSelectCategory" />
+        :loadingResults="searchResults.isFetching.value || loadingSearchResults" @select:gif="onSelectGif"
+        @select:category="onSelectCategory" @update:searchTerm="onUpdateSearchTerm" />
     </Transition>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onClickOutside, useFetch } from '@vueuse/core'
+import { onClickOutside, useDebounceFn, useFetch } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
 import { IconGif } from '@tabler/icons-vue'
 import IconButton from '../UI/IconButton.vue'
 import GifKeyboard from '../GifKeyboard/GifKeyboard.vue'
 import type { TenorCategoriesResponse, TenorSearchResponse } from '@/types/tenor'
+import { shuffle } from 'lodash'
 
 const emit = defineEmits(['select'])
 
@@ -48,12 +49,24 @@ const categories = useFetch('/api/tenor')
     url: 'https://tenor.googleapis.com/v2/categories',
     params: { locale: navigator.language }
   }).json<TenorCategoriesResponse>()
-const categoriesData = computed(() => categories.data.value?.tags ?? [])
+const categoriesData = computed(() => shuffle(categories.data.value?.tags ?? []))
 
-watch(searchTerm, (value) => {
-  if (value) {
+const loadingSearchResults = ref(false)
+
+const debouncedSearch = useDebounceFn(() => {
+  if (searchTerm.value) {
     searchResults.execute()
   }
+})
+
+watch(searchTerm, (_, oldTerm) => {
+  if (oldTerm.length === 0) {
+    loadingSearchResults.value = true;
+  }
+})
+
+searchResults.onFetchFinally(() => {
+  loadingSearchResults.value = false;
 })
 
 watch(showKeyboard, (show) => {
@@ -69,6 +82,12 @@ const onSelectGif = (url: string) => {
 
 const onSelectCategory = (category: string) => {
   searchTerm.value = category;
+  searchResults.execute()
+}
+
+const onUpdateSearchTerm = (value: string) => {
+  searchTerm.value = value;
+  debouncedSearch()
 }
 </script>
 

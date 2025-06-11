@@ -1,13 +1,17 @@
 <template>
-  <ul v-if="isLoading">
-    <li v-for="(_, index) in Array(6)" :key="index"></li>
-  </ul>
-  <ul v-else>
-    <li v-for="result in results" :key="result.id">
-      <button @click="$emit('select', getUrl(result))">
-        <img :src="getUrl(result)" :alt="result.content_description" />
-      </button>
-    </li>
+  <ul>
+    <template v-if="isLoading">
+      <li v-for="(_, index) in Array(6)" :key="index"></li>
+    </template>
+    <TransitionGroup name="fade">
+      <template v-if="!isLoading">
+        <li v-for="result in results" :key="result.id">
+          <button @click="$emit('select', getUrl(result))">
+            <img :src="getUrl(result)" :alt="result.content_description" />
+          </button>
+        </li>
+      </template>
+    </TransitionGroup>
   </ul>
 </template>
 
@@ -39,21 +43,14 @@ ul {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: .5rem;
-  overflow-y: auto;
-  height: 100%;
-  padding: 1rem;
-  @include rounded-scrollbar;
-
-  &:has(li:empty) {
-    overflow: hidden;
-  }
+  width: 100%;
 }
 
 li {
-  width: 100%;
   aspect-ratio: 2 / 1.25;
   background-color: var(--grey-10);
   border-radius: 1rem;
+  overflow: hidden;
 }
 
 button {
@@ -82,6 +79,7 @@ button {
     height: 100%;
     object-fit: cover;
     border-radius: inherit;
+    display: block;
   }
 
   &:hover {
