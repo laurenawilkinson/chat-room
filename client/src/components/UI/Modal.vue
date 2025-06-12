@@ -1,24 +1,27 @@
 <template>
   <Teleport to="#modal-container">
     <Transition name="modal">
-      <div v-if="show" class="modal">
-        <div class="modal-inner" ref="modalRef" @click.stop>
-          <IconButton size="md" @click="closeModal">
-            <IconSquareRoundedX />
-          </IconButton>
-          <div class="modal-body">
-            <slot />
-          </div>
-          <div v-if="$slots.footer" class="modal-footer">
-            <slot name="footer" :close="closeModal" />
+      <FocusTrap v-if="show" :initialFocus="getFirstFocusableEl">
+        <div class="modal" role="dialog" aria-modal="true" @keydown.escape="closeModal">
+          <div class="modal-inner" ref="modalRef" @click.stop>
+            <IconButton size="md" @click="closeModal">
+              <IconSquareRoundedX />
+            </IconButton>
+            <div class="modal-body">
+              <slot />
+            </div>
+            <div v-if="$slots.footer" class="modal-footer">
+              <slot name="footer" :close="closeModal" />
+            </div>
           </div>
         </div>
-      </div>
+      </FocusTrap>
     </Transition>
   </Teleport>
 </template>
 
 <script lang="ts" setup>
+import { FocusTrap } from 'focus-trap-vue'
 import { onClickOutside } from '@vueuse/core';
 import IconButton from './IconButton.vue';
 import { IconSquareRoundedX } from '@tabler/icons-vue'
@@ -31,7 +34,7 @@ export interface ModalProps {
 defineProps<ModalProps>()
 const emit = defineEmits(['close'])
 
-const modalRef = ref(null)
+const modalRef = ref<HTMLElement | null>(null)
 
 onClickOutside(modalRef, (e) => {
   closeModal()
@@ -41,6 +44,14 @@ onClickOutside(modalRef, (e) => {
 
 const closeModal = () => {
   emit('close')
+}
+
+const getFirstFocusableEl = () => {
+  if (!modalRef.value) return
+
+  return modalRef.value.querySelector(
+    'button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])'
+  ) as HTMLElement | undefined
 }
 </script>
 
