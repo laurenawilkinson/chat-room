@@ -24,7 +24,7 @@
       <aside>
         <ChatPanelGifKeyboard @select="sendGifMessage" />
         <ChatPanelEmojiPicker @select="appendEmojiToMessage" />
-        <IconButton theme="primary" :disabled="!canSendMessage" @click="sendMessage">
+        <IconButton label="Send message" theme="primary" :disabled="!canSendMessage" @click="sendMessage">
           <IconMessageForward />
         </IconButton>
       </aside>

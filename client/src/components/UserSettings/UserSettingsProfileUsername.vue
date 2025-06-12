@@ -4,7 +4,7 @@
       <input v-model="localValue" :placeholder="anonymousUsername" :maxlength="usernameMaxLength" />
       <Transition name="fade">
         <aside v-if="localValue.length > 0">
-          <IconButton size="sm" @click="localValue = ''">
+          <IconButton label="Clear username" size="sm" @click="localValue = ''">
             <IconCircleDashedX />
           </IconButton>
         </aside>

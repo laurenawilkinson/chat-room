@@ -4,7 +4,7 @@
       <FocusTrap v-if="show" :initialFocus="getFirstFocusableEl">
         <div class="modal" role="dialog" aria-modal="true" @keydown.escape="closeModal">
           <div class="modal-inner" ref="modalRef" @click.stop>
-            <IconButton size="md" @click="closeModal">
+            <IconButton label="Close modal" size="md" @click="closeModal">
               <IconSquareRoundedX />
             </IconButton>
             <div class="modal-body">

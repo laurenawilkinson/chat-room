@@ -19,7 +19,7 @@
         </template>
       </ContextMenu>
     </div>
-    <IconButton @click="$emit('click:settings')">
+    <IconButton label="User settings" @click="$emit('click:settings')">
       <IconSettings />
     </IconButton>
   </div>

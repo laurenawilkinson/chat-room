@@ -1,10 +1,10 @@
 <template>
   <main>
     <header>
-      <IconButton theme="primary" @click="showInfoModal = true">
+      <IconButton label="Site information" theme="primary" @click="showInfoModal = true">
         <IconInfoCircle />
       </IconButton>
-      <IconButton @click="showUsersPanel = true">
+      <IconButton label="Users panel" @click="showUsersPanel = true">
         <IconMenu />
       </IconButton>
     </header>

@@ -1,6 +1,6 @@
 <template>
   <div class="emoji-picker" ref="picker">
-    <IconButton @click.stop="showPicker = !showPicker">
+    <IconButton label="Emoji picker" @click.stop="showPicker = !showPicker">
       <IconMoodSmileBeam />
     </IconButton>
     <Transition name="fade">

@@ -1,14 +1,14 @@
 <template>
   <div class="gif-keyboard" ref="keyboard">
     <div class="gif-keyboard-search">
-      <IconButton v-if="searchTerm.length > 0" @click="clearSearch">
+      <IconButton v-if="searchTerm.length > 0" label="GIF categories" @click="clearSearch">
         <IconArrowLeft />
       </IconButton>
       <div class="gif-keyboard-search-input">
         <input v-model="searchTerm" class="sm" placeholder="Search GIFs" />
         <aside>
           <IconSearch v-if="searchTerm.length === 0" />
-          <IconButton v-else @click="clearSearch">
+          <IconButton v-else label="Clear GIF search" @click="clearSearch">
             <IconCircleDashedX />
           </IconButton>
         </aside>

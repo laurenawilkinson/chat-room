@@ -1,6 +1,6 @@
 <template>
   <div class="gif-keyboard-wrapper" ref="keyboard">
-    <IconButton @click.stop="showKeyboard = !showKeyboard">
+    <IconButton label="GIF keyboard" @click.stop="showKeyboard = !showKeyboard">
       <IconGif />
     </IconButton>
     <Transition name="fade">

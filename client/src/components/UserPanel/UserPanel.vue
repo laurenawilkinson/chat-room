@@ -1,6 +1,6 @@
 <template>
   <aside class="panel" ref="panel">
-    <IconButton size="lg" @click="closePanel">
+    <IconButton label="Close users panel" size="lg" @click="closePanel">
       <IconSquareRoundedX />
     </IconButton>
     <header>

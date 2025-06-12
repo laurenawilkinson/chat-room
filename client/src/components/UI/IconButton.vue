@@ -1,5 +1,5 @@
 <template>
-  <button :class="`icon-button ${theme} ${size}`" :type="type" :disabled="disabled">
+  <button :class="`icon-button ${theme} ${size}`" :type="type" :aria-label="label" :disabled="disabled">
     <slot />
   </button>
 </template>
@@ -10,6 +10,7 @@ interface IconButtonProps {
   disabled?: boolean
   theme?: 'primary' | 'grey'
   size?: 'sm' | 'md' | 'lg'
+  label: string;
 }
 
 withDefaults(defineProps<IconButtonProps>(), {
