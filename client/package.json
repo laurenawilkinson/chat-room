@@ -18,7 +18,7 @@
     "date-fns": "^3.6.0",
     "focus-trap-vue": "^4.0.3",
     "lodash": "^4.17.21",
-    "vue": "^3.4.21",
+    "vue": "^3.5.16",
     "vue3-emoji-picker": "^1.1.8"
   },
   "devDependencies": {
