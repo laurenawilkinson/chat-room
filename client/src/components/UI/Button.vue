@@ -1,5 +1,5 @@
 <template>
-  <button :class="`button ${theme} ${variant} ${size}`" :type="type" :disabled="disabled">
+  <button :class="`button ${theme} ${variant} ${size}`" :aria-label="label" :type="type" :disabled="disabled">
     <span>
       <slot />
     </span>
@@ -13,6 +13,7 @@ interface ButtonProps {
   theme?: 'primary' | 'grey'
   variant?: 'solid' | 'outline' | 'ghost'
   size?: 'xs' | 'sm' | 'md'
+  label?: string;
 }
 
 withDefaults(defineProps<ButtonProps>(), {
@@ -25,6 +26,8 @@ withDefaults(defineProps<ButtonProps>(), {
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/mixins/ui';
+
 .button {
   all: unset;
   box-sizing: border-box;
@@ -40,14 +43,10 @@ withDefaults(defineProps<ButtonProps>(), {
   transition-property: background-color, color;
   position: relative;
   border-radius: .75rem;
+  @include focus-outline;
 
   &:not(:disabled):hover {
     cursor: pointer;
-  }
-
-  &:focus-visible {
-    outline: 2px solid black;
-    outline-offset: 2px;
   }
 
   &::after {

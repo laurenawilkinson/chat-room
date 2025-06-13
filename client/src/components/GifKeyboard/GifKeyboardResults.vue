@@ -54,7 +54,7 @@ button {
   border: 0;
   cursor: pointer;
   position: relative;
-  @include button-focus;
+  @include focus-outline;
 
   &::after {
     content: '';

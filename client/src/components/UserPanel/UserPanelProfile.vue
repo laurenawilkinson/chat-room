@@ -5,7 +5,7 @@
       <strong>{{ activeUser.username }}</strong>
       <ContextMenu>
         <template #toggle="{ toggleMenu }">
-          <Button theme="grey" variant="ghost" size="xs" @click="toggleMenu">
+          <Button label="Status" theme="grey" variant="ghost" size="xs" @click="toggleMenu">
             <StatusIndicator :status="activeUser.status" showLabel />
           </Button>
         </template>

@@ -22,6 +22,8 @@ withDefaults(defineProps<IconButtonProps>(), {
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/mixins/ui';
+
 .icon-button {
   --icon-size: 1.5rem;
   all: unset;
@@ -33,14 +35,10 @@ withDefaults(defineProps<IconButtonProps>(), {
   padding: .25rem;
   border-radius: .75rem;
   position: relative;
+  @include focus-outline;
 
   &:not(:disabled):hover {
     cursor: pointer;
-  }
-
-  &:focus-visible {
-    outline: 2px solid black;
-    border-radius: inherit;
   }
 
   &::after {

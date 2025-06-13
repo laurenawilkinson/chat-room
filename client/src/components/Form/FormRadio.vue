@@ -24,12 +24,25 @@ const selected = computed(() => modelValue.value === props.value)
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/mixins/ui';
+
 label {
   display: inline-flex;
   cursor: pointer;
+  position: relative;
+  border-radius: .5rem;
+
+  &:has(input:focus-visible) {
+    @include focus-outline(black, true);
+  }
 
   input {
-    display: none;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 }
 </style>

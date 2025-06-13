@@ -80,7 +80,7 @@ const getFirstFocusableEl = () => {
     max-height: 90vh;
     display: flex;
     flex-direction: column;
-    padding: 2.5rem 1rem 1.5rem 2rem;
+    padding-block: 1.5rem;
 
     > button {
       position: absolute;
@@ -89,17 +89,20 @@ const getFirstFocusableEl = () => {
     }
   }
 
+  &-body,
+  &-footer {
+    padding-inline: 2rem;
+  }
+
   &-body {
-    padding-bottom: 1rem;
-    padding-right: 1rem;
     flex: 1;
     overflow-y: auto;
+    padding-block: 1rem;
     @include rounded-scrollbar;
   }
 
   &-footer {
     padding-top: 1rem;
-    padding-right: 1rem;
     display: flex;
     gap: .5rem;
     justify-content: flex-end;

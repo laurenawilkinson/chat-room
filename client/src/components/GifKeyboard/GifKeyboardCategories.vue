@@ -61,7 +61,7 @@ button {
   word-break: break-all;
   background-size: cover;
   font-size: 1rem;
-  @include button-focus;
+  @include focus-outline;
 
   &::after {
     content: '';
