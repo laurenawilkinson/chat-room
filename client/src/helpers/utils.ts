@@ -28,3 +28,16 @@ export const censorProfanity = (text: string) => {
   const matches = englishProfanityMatcher.getAllMatches(text)
   return censor.applyTo(text, matches)
 }
+
+export const getFirstFocusableElement = (
+  containerRef?: HTMLElement | null,
+  priority?: string
+): HTMLElement | null => {
+  if (!containerRef) return null
+
+  if (priority) return containerRef.querySelector(priority)
+
+  return containerRef.querySelector(
+    'button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])'
+  )
+}

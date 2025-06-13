@@ -1,29 +1,41 @@
 <template>
-  <div class="emoji-picker" ref="picker">
+  <div class="emoji-picker" ref="pickerWrapper" @keydown.escape="showPicker = false">
     <IconButton label="Emoji picker" @click.stop="showPicker = !showPicker">
       <IconMoodSmileBeam />
     </IconButton>
     <Transition name="fade">
-      <EmojiPicker v-if="showPicker" native @keydown.enter.stop @select="onSelectEmoji" />
+      <div v-if="showPicker" ref="picker">
+        <EmojiPicker native @keydown.enter.stop @select="onSelectEmoji" />
+      </div>
     </Transition>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import IconButton from '../UI/IconButton.vue'
 import { IconMoodSmileBeam } from '@tabler/icons-vue'
 import EmojiPicker, { type EmojiExt } from 'vue3-emoji-picker'
 import 'vue3-emoji-picker/css'
 import { onClickOutside } from '@vueuse/core'
+import { getFirstFocusableElement } from '@/helpers/utils'
 
 const emit = defineEmits(['select'])
 
 const showPicker = ref(false)
-const picker = ref(null)
+const pickerWrapper = ref(null)
+const picker = ref<HTMLElement | null>(null)
 
-onClickOutside(picker, () => {
+onClickOutside(pickerWrapper, () => {
   showPicker.value = false
+})
+
+watch(showPicker, async (show) => {
+  if (show) {
+    await nextTick()
+    const focusableEl = getFirstFocusableElement(picker.value, 'input[type="text"]');
+    if (focusableEl) focusableEl.focus()
+  }
 })
 
 const onSelectEmoji = ({ i }: EmojiExt) => {

@@ -42,7 +42,6 @@ li {
   aspect-ratio: 2 / 1.25;
   background-color: var(--grey-10);
   border-radius: 1rem;
-  overflow: hidden;
 }
 
 button {

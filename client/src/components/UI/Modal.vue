@@ -26,6 +26,7 @@ import { onClickOutside } from '@vueuse/core';
 import IconButton from './IconButton.vue';
 import { IconSquareRoundedX } from '@tabler/icons-vue'
 import { ref } from 'vue';
+import { getFirstFocusableElement } from '@/helpers/utils';
 
 export interface ModalProps {
   show: boolean;
@@ -47,11 +48,7 @@ const closeModal = () => {
 }
 
 const getFirstFocusableEl = () => {
-  if (!modalRef.value) return
-
-  return modalRef.value.querySelector(
-    'button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])'
-  ) as HTMLElement | undefined
+  return getFirstFocusableElement(modalRef.value)
 }
 </script>
 

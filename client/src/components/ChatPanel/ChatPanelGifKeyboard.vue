@@ -1,10 +1,10 @@
 <template>
-  <div class="gif-keyboard-wrapper" ref="keyboard">
+  <div class="gif-keyboard-wrapper" ref="keyboardWrapper" @keydown.escape="showKeyboard = false">
     <IconButton label="GIF keyboard" @click.stop="showKeyboard = !showKeyboard">
       <IconGif />
     </IconButton>
     <Transition name="fade">
-      <GifKeyboard v-if="showKeyboard" :searchTerm="searchTerm" :categories="categoriesData"
+      <GifKeyboard v-if="showKeyboard" ref="keyboard" :searchTerm="searchTerm" :categories="categoriesData"
         :loadingCategories="categories.isFetching.value" :results="searchResultsData"
         :loadingResults="searchResults.isFetching.value || loadingSearchResults" @select:gif="onSelectGif"
         @select:category="onSelectCategory" @update:searchTerm="onUpdateSearchTerm" />
@@ -14,19 +14,21 @@
 
 <script lang="ts" setup>
 import { onClickOutside, useDebounceFn, useFetch } from '@vueuse/core'
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { IconGif } from '@tabler/icons-vue'
 import IconButton from '../UI/IconButton.vue'
 import GifKeyboard from '../GifKeyboard/GifKeyboard.vue'
 import type { TenorCategoriesResponse, TenorSearchResponse } from '@/types/tenor'
 import { shuffle } from 'lodash'
+import { getFirstFocusableElement } from '@/helpers/utils'
 
 const emit = defineEmits(['select'])
 
 // Show/Hide keyboard
 const showKeyboard = ref(false)
-const keyboard = ref(null)
-onClickOutside(keyboard, () => {
+const keyboardWrapper = ref(null)
+const keyboard = ref<typeof GifKeyboard | null>(null)
+onClickOutside(keyboardWrapper, () => {
   showKeyboard.value = false
 })
 
@@ -69,9 +71,12 @@ searchResults.onFetchFinally(() => {
   loadingSearchResults.value = false;
 })
 
-watch(showKeyboard, (show) => {
+watch(showKeyboard, async (show) => {
   if (show) {
     searchTerm.value = ''
+    await nextTick()
+    const focusableEl = getFirstFocusableElement(keyboard.value?.el);
+    if (focusableEl) focusableEl.focus()
   }
 })
 

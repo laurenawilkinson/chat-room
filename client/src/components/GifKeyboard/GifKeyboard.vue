@@ -29,6 +29,7 @@ import GifKeyboardResults from './GifKeyboardResults.vue';
 import IconButton from '../UI/IconButton.vue';
 import { IconArrowLeft, IconCircleDashedX, IconSearch } from '@tabler/icons-vue';
 import { useVModel } from '@vueuse/core';
+import { ref } from 'vue';
 
 interface GifKeyboardProps {
   searchTerm: string;
@@ -41,6 +42,8 @@ interface GifKeyboardProps {
 const props = defineProps<GifKeyboardProps>()
 const emit = defineEmits(['update:searchTerm', 'select:gif', 'select:category'])
 const searchTerm = useVModel(props, 'searchTerm', emit)
+const keyboard = ref(null)
+defineExpose({ el: keyboard })
 
 const clearSearch = () => {
   searchTerm.value = ''

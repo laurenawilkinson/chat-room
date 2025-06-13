@@ -18,7 +18,7 @@
         </small>
       </Transition>
     </div>
-    <form @submit.prevent="sendMessage">
+    <form @submit.prevent>
       <input v-model.trim="message" placeholder="Type a message" :maxlength="maxMessageLength"
         @input="sendTypingIndicator" @blur="sendStopTypingIndicator" @keydown.enter="sendMessage" />
       <aside>
