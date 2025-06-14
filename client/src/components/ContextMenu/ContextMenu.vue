@@ -68,7 +68,7 @@ const adjustMenuPosition = () => {
   min-width: 110px;
   background-color: white;
   border: 2px solid var(--grey-20);
-  box-shadow: 0 3px 6px #849eb025;
+  box-shadow: var(--subtle-box-shadow);
   border-radius: .75rem;
   padding: .5rem;
   transform-origin: top center;

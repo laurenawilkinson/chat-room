@@ -42,6 +42,7 @@ li {
   aspect-ratio: 2 / 1.25;
   background-color: var(--grey-10);
   border-radius: 1rem;
+  display: flex;
 }
 
 button {
@@ -70,7 +71,7 @@ button {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, .5);
-    transition: .2s ease-out;
+    transition: var(--transition-default);
   }
 
   &:hover {

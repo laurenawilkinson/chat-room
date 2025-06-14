@@ -10,20 +10,20 @@ body {
   color: var(--text-colour);
 
   ::selection {
-    background-color: rgba(#bababa, 0.2);
+    background-color: var(--grey-10);
   }
 }
 
 .panel {
   background-color: white;
   border-radius: 20px;
-  box-shadow: 0 3px 6px #849eb025;
+  box-shadow: var(--subtle-box-shadow);
   padding: 2rem;
 }
 
 input,
 textarea {
-  border: 2px solid #f0f0f0;
+  border: 2px solid var(--grey-20);
   border-radius: var(--10px);
   padding: var(--18px) var(--20px);
   resize: none;
@@ -34,7 +34,7 @@ textarea {
   color: inherit;
 
   &::placeholder {
-    color: var(--grey-40);
+    color: var(--grey-50);
   }
 
   &:focus {

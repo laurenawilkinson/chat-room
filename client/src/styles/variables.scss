@@ -27,6 +27,7 @@
 
   --background-colour: #dff7ff;
   --text-colour: var(--grey-100);
+  --subtle-box-shadow: 0 3px 6px #849eb025;
 
   //--- Fonts
   --font-weight-regular: 400;
@@ -44,4 +45,7 @@
   --20px: 1.25rem;
   --24px: 1.5rem;
   --32px: 2rem;
+
+  //--- Misc
+  --transition-default: 0.2s ease-out;
 }

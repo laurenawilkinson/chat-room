@@ -223,7 +223,7 @@ header {
   background-color: white;
   width: 100%;
   height: $header-height;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--grey-20);
 
   @include min-breakpoint($mobile-bp) {
     position: fixed;

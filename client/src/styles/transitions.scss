@@ -10,7 +10,7 @@
 
 .pop-up-enter-active,
 .pop-up-leave-active {
-  transition: 0.2s ease-out;
+  transition: var(--transition-default);
   transition-property: opacity, transform;
 }
 

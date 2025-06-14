@@ -60,7 +60,7 @@ const dateString = computed(() => {
   }
 
   small {
-    color: #a3a3a3;
+    color: var(--grey-65);
     font-size: var(--10px);
   }
 

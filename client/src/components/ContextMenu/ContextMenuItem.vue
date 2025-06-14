@@ -17,7 +17,7 @@ button {
   width: 100%;
   cursor: pointer;
   border-radius: .5rem;
-  transition: background-color .2s ease-out;
+  transition: background-color var(--transition-default);
 
   &:hover {
     background-color: var(--grey-15);

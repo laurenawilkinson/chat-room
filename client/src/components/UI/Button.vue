@@ -39,7 +39,7 @@ withDefaults(defineProps<ButtonProps>(), {
   border: 2px solid transparent;
   background-color: transparent;
   font-size: 1rem;
-  transition: .2s ease-out;
+  transition: var(--transition-default);
   transition-property: background-color, color;
   position: relative;
   border-radius: .75rem;
@@ -53,7 +53,7 @@ withDefaults(defineProps<ButtonProps>(), {
     content: '';
     position: absolute;
     inset: -2px;
-    transition: .2s ease-out;
+    transition: var(--transition-default);
     border-radius: inherit;
   }
 

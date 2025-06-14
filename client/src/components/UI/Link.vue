@@ -29,7 +29,7 @@ a {
     content: '';
     position: absolute;
     inset: 0;
-    transition: .2s ease-out;
+    transition: var(--transition-default);
     border-radius: inherit;
     background-color: var(--link-theme);
     opacity: 0;

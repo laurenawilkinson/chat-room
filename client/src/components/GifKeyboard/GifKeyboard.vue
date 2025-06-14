@@ -64,7 +64,7 @@ const onSelectGif = (url: string) => {
 .gif-keyboard {
   background-color: white;
   border: 2px solid var(--grey-20);
-  box-shadow: 0 3px 6px #849eb025;
+  box-shadow: var(--subtle-box-shadow);
   border-radius: .75rem;
   display: flex;
   flex-direction: column;
@@ -110,7 +110,7 @@ const onSelectGif = (url: string) => {
     svg {
       width: 1.5rem;
       height: 1.5rem;
-      stroke: var(--grey-40);
+      stroke: var(--grey-50);
     }
   }
 }

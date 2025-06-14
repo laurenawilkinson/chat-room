@@ -36,7 +36,7 @@ p {
 }
 
 small {
-  opacity: .4;
+  color: var(--grey-60);
   font-size: var(--14px);
 }
 </style>

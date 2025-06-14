@@ -45,7 +45,7 @@ withDefaults(defineProps<IconButtonProps>(), {
     content: '';
     position: absolute;
     inset: -2px;
-    transition: .2s ease-out;
+    transition: var(--transition-default);
     border-radius: inherit;
     background-color: var(--icon-button-theme);
     opacity: 0;
@@ -70,7 +70,7 @@ withDefaults(defineProps<IconButtonProps>(), {
   }
 
   &.grey {
-    --icon-button-theme: var(--grey-40);
+    --icon-button-theme: var(--grey-50);
   }
 
   /* Sizes */

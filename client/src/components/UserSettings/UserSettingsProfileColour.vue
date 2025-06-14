@@ -42,7 +42,8 @@ const modelValue = useVModel(props, 'modelValue', emit)
     height: auto;
 
     circle {
-      transition: stroke-opacity 0.2s ease-out;
+      transition: stroke-opacity var(--transition-default);
+      ;
     }
   }
 }
