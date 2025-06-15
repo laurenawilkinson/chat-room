@@ -16,6 +16,7 @@ A WebSocket driven chat application built with Express and Vue.
 - Set your activity status to "Online" or "Away"
 - Quality control - profanity in messages, usernames, and GIFs is filtered
 - Fully keyboard accessible
+- Fully responsive for seamless use across multiple devices and screen sizes
 
 ## 🎯 Feature Roadmap
 
