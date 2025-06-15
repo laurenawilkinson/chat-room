@@ -3,7 +3,7 @@
     <IconButton label="GIF keyboard" @click.stop="showKeyboard = !showKeyboard">
       <IconGif />
     </IconButton>
-    <Transition name="fade">
+    <Transition name="pop-up">
       <GifKeyboard v-if="showKeyboard" ref="keyboard" :searchTerm="searchTerm" :categories="categoriesData"
         :loadingCategories="categories.isFetching.value" :results="searchResultsData"
         :loadingResults="searchResults.isFetching.value || loadingSearchResults" @select:gif="onSelectGif"
