@@ -26,6 +26,7 @@
   <SiteInfoModal :show="showInfoModal" @close="showInfoModal = false" />
   <UserSettingsModal :show="showUserSettings" :user="activeUser" @submit="sendUserProfileData"
     @close="showUserSettings = false" />
+  <Toaster />
 </template>
 
 <script lang="ts" setup>
@@ -46,11 +47,14 @@ import Message from './models/Message'
 import { maxMessageCount, typingIndicatorTimeout } from '~/helpers/message'
 import { defaultUserProfile, getLocalUser, storeLocalUser } from './helpers/user'
 import { debounce, throttle } from 'lodash'
+import Toaster from './components/Toaster/Toaster.vue'
+import { provideToasterContext } from './contexts/useToasterContext'
 
 const websocketURL = import.meta.env.PROD
   ? `wss://${window.location.host}`
   : `ws://localhost:${import.meta.env.VITE_SERVER_PORT}`
 const localUser = getLocalUser()
+const { pushToast } = provideToasterContext();
 
 const { send } = useWebSocket(websocketURL, {
   heartbeat: {
@@ -72,6 +76,11 @@ const { send } = useWebSocket(websocketURL, {
   },
   onError: (_ws, event) => {
     console.error('WebSocket has errored', event)
+    pushToast({
+      type: 'error',
+      title: 'Server Error!',
+      autoClose: false,
+    })
     onUserDisconnect()
   },
   onMessage: (_ws, event: MessageEvent<string>) => {
@@ -184,6 +193,12 @@ const onActiveUser = (data: ActiveUserResponse['data']) => {
 }
 
 const onUserDisconnect = () => {
+  pushToast({
+    type: 'error',
+    title: 'Disconnected',
+    description: 'Lost connection with the server, please reload the page',
+    hideClose: true
+  })
   activeUser.value.status = 'unknown'
   users.value.forEach(user => {
     if (user.id === activeUser.value.id) user.status = 'unknown'
