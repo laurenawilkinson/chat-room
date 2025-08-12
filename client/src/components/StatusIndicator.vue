@@ -11,12 +11,12 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import type { UserStatus } from '~/types/user';
+import type { UserStatus } from '~/types/user'
 
 interface StatusIndicatorProps {
-  status: UserStatus;
+  status: UserStatus
   showLabel?: boolean
-  pulseOn?: string | number | boolean;
+  pulseOn?: string | number | boolean
 }
 
 const props = defineProps<StatusIndicatorProps>()
@@ -34,7 +34,7 @@ watch(
   () => props.pulseOn,
   (value) => {
     if (value) {
-      isPulsing.value = false;
+      isPulsing.value = false
       requestAnimationFrame(() => {
         isPulsing.value = true
       })
@@ -67,6 +67,7 @@ watch(
     position: relative;
     width: 10px;
     height: 10px;
+    display: flex;
 
     &::after {
       content: '';
@@ -75,7 +76,7 @@ watch(
       width: 100%;
       height: 100%;
       border-radius: 10px;
-      opacity: .5;
+      opacity: 0.5;
       background-color: var(--status-colour, var(--grey-40));
     }
 
